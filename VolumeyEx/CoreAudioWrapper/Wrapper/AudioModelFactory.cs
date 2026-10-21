@@ -110,7 +110,7 @@ internal static class AudioModelFactory
 				if(session == null)
 					continue;
 
-				if(processes.FirstOrDefault(p => p.GroupingParam.Equals(session.GroupingParam) || Equals(p.FilePath, session.FilePath)) is { } process)
+				if(processes.FirstOrDefault(p => BelongsTo(session, p)) is { } process)
 				{
 					session.Name = process.Name;
 					process.AddSession(session);
@@ -152,24 +152,26 @@ internal static class AudioModelFactory
 		return processes;
 	}
 
+	/// <summary>
+	/// Whether the session goes into the app's model: Windows gave both the same grouping parameter, or they come from the same
+	/// executable under the same app name. A shared executable alone isn't enough: the sessions of WhatsApp and of another app built
+	/// on WebView2 both come from msedgewebview2.exe, and Windows' mixer shows them as two apps
+	/// </summary>
+	internal static bool BelongsTo(AudioSessionModel session, AudioProcessModel process)
+		=> process.GroupingParam.Equals(session.GroupingParam)
+		   || (Equals(process.FilePath, session.FilePath) && string.Equals(process.Name, session.Name, StringComparison.Ordinal));
+
 	internal static AudioProcessModel? CreateProcessModel(AudioSessionModel session, AudioSessionControl sControl, IHotkeyService hotkeys, out bool isSystemSounds)
 	{
 		//null if the process can't be opened (e.g. it has exited already)
 		Process? proc = null;
 		isSystemSounds = false;
+		//the app's name, as Windows' mixer shows it (see CreateSessionModel)
 		string processName = session.Name;
 		//the session's path (see CreateSessionModel), or its process ID when the path couldn't be read
 		string? path = Path.IsPathFullyQualified(session.FilePath) ? session.FilePath : null;
 
 		try { proc = Process.GetProcessById((int)session.ProcessId); }
-		catch { }
-
-		//from the file, not the process: it also works for apps that can't be opened (elevated, guarded by anti-cheat)
-		try
-		{
-			if(path != null && FileVersionInfo.GetVersionInfo(path).FileDescription is { Length: > 0 } description)
-				processName = description;
-		}
 		catch { }
 
 		ImageSource? icon = null;
@@ -260,6 +262,16 @@ internal static class AudioModelFactory
 			catch { }
 		}
 
+		//the app's name instead of the process's, as Windows' mixer shows it: e.g. "WhatsApp" for the msedgewebview2 process that
+		//plays its sound. The System Sounds session gets its own name with the app model (CreateProcessModel)
+		if(processId != 0)
+		{
+			string? displayName = null;
+			try { displayName = sControl.DisplayName; }
+			catch { }
+			name = AppIdentity.GetAppName(displayName, AppIdentity.GetPackage(processId), path, name);
+		}
+
 		try
 		{
 			var sessionVolume = new AudioSessionVolume(sControl.SimpleAudioVolume);
@@ -305,38 +317,39 @@ internal static class AudioModelFactory
 	}
 
 	/// <summary>
-	/// The icon of the app's main window first, as the taskbar and Windows' volume mixer show it (an executable can give its window
-	/// another of its icons), then its executable's, the session's own icon path, and the generic program icon
+	/// The app's icon, in the order Windows' volume mixer looks for it: the icon the app gave its session, the icon of its main window
+	/// (as the taskbar shows it: an executable can give its window another of its icons), its package's logo (a Store app's helper
+	/// process, e.g. WhatsApp's WebView2, has no window), its executable's icon, and the generic program icon
 	/// </summary>
 	/// <param name="path">The app's executable, null if its path couldn't be read</param>
 	/// <param name="name">The app's name for the log</param>
 	private static ImageSource? ExtractSessionIcon(uint processId, string? path, string name, AudioSessionControl sc)
 	{
-		ImageSource? icon = IconHelper.GetWindowIconSource(processId);
+		ImageSource? icon = TryExtractSessionIcon(name, sc) ?? IconHelper.GetWindowIconSource(processId);
+		if(icon == null && AppIdentity.GetPackage(processId)?.LogoPath is { } logo)
+			icon = IconHelper.GetImageFileSource(logo);
 		if(icon == null && path != null)
 		{
 			try { icon = IconHelper.GetAppIconSource(path); }
 			catch(Exception e)
 			{
-				//e.g. a file the user may not read; the session's own icon path is tried next
+				//e.g. a file the user may not read
 				Logger.Debug($"Couldn't read the icon of [{name}] from [{path}]", e);
 			}
 		}
-		return icon ?? TryExtractIconAlternatively(name, sc) ?? IconHelper.GenericExeIconSource;
+		return icon ?? IconHelper.GenericExeIconSource;
 	}
 
-	private static ImageSource? TryExtractIconAlternatively(string name, AudioSessionControl sc)
+	/// <summary>The icon the app gave its session (IAudioSessionControl::GetIconPath), null if it gave none or it can't be read</summary>
+	private static ImageSource? TryExtractSessionIcon(string name, AudioSessionControl sc)
 	{
-		//it's possible to get system process icon from its IAudioSessionControl interface
 		string? iconPath = null;
 		try { iconPath = sc.IconPath; }
 		catch { }
 		if(string.IsNullOrEmpty(iconPath))
-		{
-			//the icon path will be empty if the exe was launched with admin rights
-			//looks like its impossible to get an icon of an exe with admin rights so we return generic windows exe icon
-			return IconHelper.GenericExeIconSource;
-		}
+			return null;
+		//an indirect resource path ("@dll,-id") names the same icon without the "@"
+		iconPath = iconPath.TrimStart('@');
 
 		try
 		{
@@ -345,7 +358,7 @@ internal static class AudioModelFactory
 		}
 		catch(Exception e)
 		{
-			//the app's own icon path is missing or broken; the generic icon is used
+			//the app's own icon path is missing or broken; the window's and the executable's icons are tried next
 			Logger.Debug($"Failed to extract the session icon, process: [{name}] icon path: [{iconPath}]", e);
 			return null;
 		}

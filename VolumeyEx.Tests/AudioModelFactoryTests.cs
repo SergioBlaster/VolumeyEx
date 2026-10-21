@@ -17,7 +17,7 @@ namespace VolumeyEx.Tests;
 public class AudioModelFactoryTests
 {
 	/// <summary>A session as Windows lists it; <see cref="Broken"/>: its app model can't be built</summary>
-	private sealed record Control(string File, bool SystemSounds = false, bool Broken = false, bool Unreadable = false, bool Throws = false)
+	private sealed record Control(string File, bool SystemSounds = false, bool Broken = false, bool Unreadable = false, bool Throws = false, string App = null)
 	{
 		//two sessions of one app are still two sessions
 		public Guid Id { get; } = Guid.NewGuid();
@@ -35,8 +35,9 @@ public class AudioModelFactoryTests
 		var notifications = new Mock<IAudioSessionStateNotifications>();
 		registrations[control] = notifications;
 		//Windows gives the sessions of one app the same grouping parameter
-		var grouping = new Guid(System.Security.Cryptography.MD5.HashData(System.Text.Encoding.UTF8.GetBytes(control.File)));
-		return new AudioSessionModel(false, 50, control.File, 1, control.File, control.File, grouping, new Mock<IAudioSessionVolume>().Object, notifications.Object);
+		string app = control.App ?? control.File;
+		var grouping = new Guid(System.Security.Cryptography.MD5.HashData(System.Text.Encoding.UTF8.GetBytes(app)));
+		return new AudioSessionModel(false, 50, control.File, 1, app, control.File, grouping, new Mock<IAudioSessionVolume>().Object, notifications.Object);
 	}
 
 	private AudioProcessModel CreateProcess(AudioSessionModel session, Control control, out bool isSystemSounds)
@@ -44,7 +45,8 @@ public class AudioModelFactoryTests
 		isSystemSounds = control.SystemSounds;
 		if(control.Throws)
 			throw new InvalidOperationException("the system sounds name couldn't be saved");
-		return control.Broken ? null : new AudioProcessModel(50, false, control.File, 1, control.File, null, null, hotkeys);
+		//named after the session, as AudioModelFactory.CreateProcessModel does
+		return control.Broken ? null : new AudioProcessModel(50, false, session.Name, 1, control.File, null, null, hotkeys);
 	}
 
 	private List<AudioProcessModel> Group(params Control[] controls)
@@ -94,5 +96,31 @@ public class AudioModelFactoryTests
 
 		Assert.AreEqual("fine.exe", Assert.ContainsSingle(processes).Name);
 		CollectionAssert.AreEqual(new[] { unreadable }, released);
+	}
+
+	[TestMethod]
+	public void AppsSharingAnExecutableAreShownApart()
+	{
+		//WhatsApp and another app built on WebView2: both play their sound from msedgewebview2.exe
+		var whatsApp = new Control("msedgewebview2.exe", App: "WhatsApp");
+		var globo = new Control("msedgewebview2.exe", App: "GloboLiveWin");
+		var whatsAppCall = new Control("msedgewebview2.exe", App: "WhatsApp");
+
+		var processes = Group(whatsApp, globo, whatsAppCall);
+
+		CollectionAssert.AreEqual(new[] { "WhatsApp", "GloboLiveWin" }, processes.Select(p => p.Name).ToList());
+		Assert.HasCount(2, processes[0].Sessions);
+	}
+
+	[TestMethod]
+	public void SessionsOfOneExecutableAndNameGoTogetherWithoutAGroupingParameter()
+	{
+		var process =new AudioProcessModel(50, false, "Game", 1, @"C:\Games\game.exe", null, null, hotkeys);
+		AudioSessionModel Session(string name, string file) => new AudioSessionModel(false, 50, "id", 1, name, file, Guid.NewGuid(),
+			new Mock<IAudioSessionVolume>().Object, new Mock<IAudioSessionStateNotifications>().Object);
+
+		Assert.IsTrue(AudioModelFactory.BelongsTo(Session("Game", @"C:\Games\game.exe"), process));
+		Assert.IsFalse(AudioModelFactory.BelongsTo(Session("Other app", @"C:\Games\game.exe"), process));
+		Assert.IsFalse(AudioModelFactory.BelongsTo(Session("Game", @"C:\Other\game.exe"), process));
 	}
 }

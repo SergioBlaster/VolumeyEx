@@ -8,6 +8,7 @@ using System.Windows.Threading;
 using log4net;
 using Microsoft.Xaml.Behaviors.Core;
 using VolumeyEx.CoreAudioWrapper.Wrapper;
+using VolumeyEx.Helper;
 
 namespace VolumeyEx.Model;
 
@@ -135,9 +136,13 @@ public sealed class AudioSessionModel : IManagedAudioSession
 		}
 	}
 
-	//raised on a COM thread, which must not wait for the UI thread
+	//raised on a COM thread, which must not wait for the UI thread. An indirect name ("@dll,-id") is read from its resource,
+	//and a cleared one keeps the current name (the app's, see AudioModelFactory.CreateSessionModel)
 	private void OnNameChanged(string newName)
-		=> dispatcher.InvokeAsync(() => { Name = newName; });
+	{
+		if(AppIdentity.ResolveDisplayName(newName) is { } name)
+			dispatcher.InvokeAsync(() => { Name = name; });
+	}
 
 	/// <summary>
 	/// True if Windows disconnected the session because the device's format changed (also when spatial sound is turned on or off):

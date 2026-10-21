@@ -120,6 +120,31 @@ static class IconHelper
 	internal static ImageSource? GetAppIconSource(string exePath) => GetCached(exePath, ReadAppIcon);
 
 	/// <summary>
+	/// An image file (e.g. a Store app's PNG logo) as a frozen image, read once; null if it can't be read
+	/// </summary>
+	internal static ImageSource? GetImageFileSource(string imagePath) => GetCached(imagePath, ReadImageFile);
+
+	private static ImageSource? ReadImageFile(string imagePath)
+	{
+		try
+		{
+			var image = new BitmapImage();
+			image.BeginInit();
+			//read now and close the file: the image is shared across threads and kept for the whole run
+			image.CacheOption = BitmapCacheOption.OnLoad;
+			image.UriSource = new Uri(imagePath, UriKind.Absolute);
+			image.EndInit();
+			if(image.CanFreeze)
+				image.Freeze();
+			return image;
+		}
+		catch
+		{
+			return null;
+		}
+	}
+
+	/// <summary>
 	/// The icon of an app's main window as a frozen image (see <see cref="NativeMethods.GetAppWindowIcon"/>); null if it has none
 	/// that shows something. Not cached: one executable can give its window different icons (war3.exe shows The Frozen Throne's
 	/// icon when it runs that expansion)
