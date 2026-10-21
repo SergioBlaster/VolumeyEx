@@ -1,0 +1,15 @@
+﻿#nullable enable
+using System;
+using VolumeyEx.Model;
+
+namespace VolumeyEx.CoreAudioWrapper.Wrapper;
+
+public interface IDeviceStateNotificationHandler : IDisposable
+{
+	public event Action<string>? DefaultDeviceChanged;
+	public event Action<string>? NameChanged;
+	public event Action<string>? IconPathChanged;
+	public event Action<string>? FormatChanged;
+	public event Action<string>? DeviceDisabled;
+	public event Action<OutputDeviceModel>? ActiveDeviceAdded;
+}

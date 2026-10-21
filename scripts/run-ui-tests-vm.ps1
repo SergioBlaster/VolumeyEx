@@ -4,7 +4,7 @@
 
 .DESCRIPTION
   Copies only the builds (no sources, no .git) into the guest with vmrun, runs them there on the signed-in desktop and copies
-  the result back to %TEMP%\Volumey-uitests-vm: result.log, and data.zip with the data folders of failed tests.
+  the result back to %TEMP%\VolumeyEx-uitests-vm: result.log, and data.zip with the data folders of failed tests.
   The VM and its Windows sign-in come from a settings file that git ignores (-Config, by default ui-tests-vm.settings in the
   repository's root), one key=value per line:
     vmx=D:\VMs\Windows 10\Windows 10.vmx
@@ -26,8 +26,8 @@ param(
 )
 $ErrorActionPreference = 'Stop'
 $repo = Split-Path $PSScriptRoot -Parent
-$appDir = Join-Path $repo 'Volumey\bin\x64\Debug\net10.0-windows10.0.19041.0\win-x64'
-$testsDir = Join-Path $repo 'Volumey.UITests\bin\x64\Debug\net10.0-windows10.0.19041.0\win-x64'
+$appDir = Join-Path $repo 'VolumeyEx\bin\x64\Debug\net10.0-windows10.0.19041.0\win-x64'
+$testsDir = Join-Path $repo 'VolumeyEx.UITests\bin\x64\Debug\net10.0-windows10.0.19041.0\win-x64'
 $vmrun = Join-Path ${env:ProgramFiles(x86)} 'VMware\VMware Workstation\vmrun.exe'
 if (-not (Test-Path $vmrun)) { $vmrun = Join-Path $env:ProgramFiles 'VMware\VMware Workstation\vmrun.exe' }
 if (-not (Test-Path $vmrun)) { throw 'vmrun.exe not found: install VMware Workstation' }
@@ -52,13 +52,13 @@ function Invoke-Vmrun {
 }
 
 if (-not $NoBuild) {
-    dotnet build (Join-Path $repo 'Volumey\Volumey.csproj') -c Debug -p:Platform=x64 --nologo -v q
+    dotnet build (Join-Path $repo 'VolumeyEx\VolumeyEx.csproj') -c Debug -p:Platform=x64 --nologo -v q
     if ($LASTEXITCODE -ne 0) { throw 'Building the app failed' }
-    dotnet build (Join-Path $repo 'Volumey.UITests\Volumey.UITests.csproj') -c Debug -p:Platform=x64 --nologo -v q
+    dotnet build (Join-Path $repo 'VolumeyEx.UITests\VolumeyEx.UITests.csproj') -c Debug -p:Platform=x64 --nologo -v q
     if ($LASTEXITCODE -ne 0) { throw 'Building the UI tests failed' }
 }
 
-$work = Join-Path $env:TEMP 'Volumey-uitests-vm'
+$work = Join-Path $env:TEMP 'VolumeyEx-uitests-vm'
 $stage = Join-Path $work 'stage'
 $zip = Join-Path $work 'stage.zip'
 New-Item -ItemType Directory -Force $work | Out-Null
@@ -72,7 +72,7 @@ Copy-Item (Join-Path $PSScriptRoot 'ui-tests-guest.ps1') $stage
 Compress-Archive -Path (Join-Path $stage '*') -DestinationPath $zip -CompressionLevel Fastest
 
 if ((& $vmrun -T ws checkToolsState $Vmx) -ne 'running') { throw 'The VM isn''t running or VMware Tools isn''t running in it' }
-$guest = 'C:\Volumey-uitests'
+$guest = 'C:\VolumeyEx-uitests'
 $powershell = 'C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe'
 Write-Host 'Copying the builds into the VM'
 Invoke-Vmrun runProgramInGuest $Vmx $powershell -NoProfile -Command "Remove-Item '$guest' -Recurse -Force -ErrorAction SilentlyContinue; New-Item -ItemType Directory '$guest' | Out-Null" | Out-Null

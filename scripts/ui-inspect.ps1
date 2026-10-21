@@ -1,6 +1,6 @@
 <#
 .SYNOPSIS
-    Inspects and drives the running dev build of Volumey through UI Automation, without a mouse.
+    Inspects and drives the running dev build of VolumeyEx through UI Automation, without a mouse.
 
 .EXAMPLE
     ./scripts/ui-inspect.ps1 -Show                          # bring the window up (like a second app launch would)
@@ -38,7 +38,7 @@ Add-Type -Namespace Native -Name Win32 -MemberDefinition @'
 [DllImport("user32.dll")] public static extern uint GetWindowThreadProcessId(System.IntPtr hWnd, out uint processId);
 '@ -ReferencedAssemblies System.Drawing.Primitives -ErrorAction SilentlyContinue
 
-# A real click at a screen point, only if the window there belongs to the dev build: another app's window can cover Volumey,
+# A real click at a screen point, only if the window there belongs to the dev build: another app's window can cover VolumeyEx,
 # and the click would land in that app instead
 function Invoke-MouseClick([int]$sx, [int]$sy) {
     $hwnd = [Native.Win32]::WindowFromPoint([System.Drawing.Point]::new($sx, $sy))
@@ -47,7 +47,7 @@ function Invoke-MouseClick([int]$sx, [int]$sy) {
     [void][Native.Win32]::GetWindowThreadProcessId($root, [ref]$owner)
     if ($owner -ne $ProcessId) {
         $other = (Get-Process -Id $owner -ErrorAction SilentlyContinue).ProcessName
-        throw "Not clicking: the window at $sx,$sy belongs to '$other' (pid $owner), not the dev build. Bring Volumey to the front first."
+        throw "Not clicking: the window at $sx,$sy belongs to '$other' (pid $owner), not the dev build. Bring VolumeyEx to the front first."
     }
     [void][Native.Win32]::SetCursorPos($sx, $sy)
     [Native.Win32]::mouse_event(0x0002, 0, 0, 0, [UIntPtr]::Zero) # left down
@@ -55,9 +55,9 @@ function Invoke-MouseClick([int]$sx, [int]$sy) {
 }
 
 $repo = Split-Path $PSScriptRoot -Parent
-$exe = Join-Path $repo 'Volumey\bin\x64\Debug\net10.0-windows10.0.19041.0\win-x64\Volumey.exe'
+$exe = Join-Path $repo 'VolumeyEx\bin\x64\Debug\net10.0-windows10.0.19041.0\win-x64\VolumeyEx.exe'
 if (-not $ProcessId) {
-    $process = Get-Process Volumey -ErrorAction SilentlyContinue | Where-Object { $_.Path -eq $exe } | Select-Object -First 1
+    $process = Get-Process VolumeyEx -ErrorAction SilentlyContinue | Where-Object { $_.Path -eq $exe } | Select-Object -First 1
     if (-not $process) { throw 'The dev build is not running. Start it with scripts/run-dev.ps1.' }
     $ProcessId = $process.Id
 }

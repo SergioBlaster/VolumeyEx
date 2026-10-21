@@ -1,22 +1,19 @@
 <h3 align="center">
   <br>
-  <img width="200" src=".github/images/icon.png" alt="Volumey">
+  <img width="200" src=".github/images/icon.png" alt="VolumeyEx">
   <br>
-  Volumey
+  VolumeyEx
 </h3>
 <h4 align="center">
   A volume mixer for Windows with global hotkeys for every app and device.
   <br>
   <br>
-  <a href="https://github.com/G-Stas/Volumey/releases/latest"><img src="https://img.shields.io/github/v/release/G-Stas/Volumey" alt="Latest release"></a>
-  <a href="https://github.com/G-Stas/Volumey/releases"><img src="https://img.shields.io/github/downloads/G-Stas/Volumey/total" alt="GitHub downloads"></a>
-  <a href="https://github.com/G-Stas/Volumey/actions/workflows/build.yml"><img src="https://img.shields.io/github/actions/workflow/status/G-Stas/Volumey/build.yml?branch=main" alt="Build status"></a>
+  <a href="https://github.com/SergioBlaster/VolumeyEx/releases/latest"><img src="https://img.shields.io/github/v/release/SergioBlaster/VolumeyEx" alt="Latest release"></a>
+  <a href="https://github.com/SergioBlaster/VolumeyEx/releases"><img src="https://img.shields.io/github/downloads/SergioBlaster/VolumeyEx/total" alt="GitHub downloads"></a>
+  <a href="https://github.com/SergioBlaster/VolumeyEx/actions/workflows/build.yml"><img src="https://img.shields.io/github/actions/workflow/status/SergioBlaster/VolumeyEx/build.yml?branch=main" alt="Build status"></a>
   <br>
   <br>
-  <a href='//www.microsoft.com/store/apps/9mzcq03mx0s3?cid=storebadge&ocid=badge'>
-      <img width="160" src='https://developer.microsoft.com/store/badges/images/English_get-it-from-MS.png' alt='Get it from Microsoft'/>
-  </a>
-  <br>
+  A personal fork of <a href="https://github.com/G-Stas/Volumey">G-Stas/Volumey</a>.
 </h4>
 
 ## Features
@@ -27,7 +24,7 @@
 - **Default device:** switch to another output device with one key
 - **Media keys:** play/pause, previous, next and stop
 - **Mixer:** open the volume mixer
-- **Two modes:** keep the keys to Volumey, or share them with other apps (handy in games)
+- **Two modes:** keep the keys to VolumeyEx, or share them with other apps (handy in games)
 - **Your step:** pick how much each press changes the volume
 
 ### Volume mixer
@@ -46,8 +43,7 @@
 </p>
 
 ## Download
-- [Microsoft Store](https://www.microsoft.com/store/apps/9mzcq03mx0s3)
-- [GitHub Releases](https://github.com/G-Stas/Volumey/releases)
+- [GitHub Releases](https://github.com/SergioBlaster/VolumeyEx/releases)
 
 ## Supported OS
 `Windows 11` `Windows 10 19041.0+`
@@ -60,4 +56,4 @@
 - [AutoUpdater.NET](https://github.com/ravibpatel/AutoUpdater.NET)
 
 ## License
-Volumey is released under the [GPL-3.0 License](https://github.com/G-Stas/Volumey/blob/main/LICENSE).
+VolumeyEx is released under the [GPL-3.0 License](https://github.com/SergioBlaster/VolumeyEx/blob/main/LICENSE).

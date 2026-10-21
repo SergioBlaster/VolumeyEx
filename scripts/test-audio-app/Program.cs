@@ -4,10 +4,10 @@ using NAudio.Wave;
 
 //usage: testaudio <seconds> [<volume 0..1> <after seconds>] [--window] [--no-reset]
 //plays silence on the default output device for <seconds>; optionally sets its own session volume after a delay,
-//like a change in the Windows mixer (Volumey shows an OSD for it when "react to all volume changes" is on).
-//--window also shows a small window titled "Volumey test app <pid>", so a UI test can put the app in front (foreground-app hotkeys)
+//like a change in the Windows mixer (VolumeyEx shows an OSD for it when "react to all volume changes" is on).
+//--window also shows a small window titled "VolumeyEx test app <pid>", so a UI test can put the app in front (foreground-app hotkeys)
 bool window = args.Contains("--window");
-//--no-reset keeps the session volume Windows starts it with (a test of Volumey's volume limit for new apps)
+//--no-reset keeps the session volume Windows starts it with (a test of VolumeyEx's volume limit for new apps)
 bool reset = !args.Contains("--no-reset");
 args = args.Where(a => !a.StartsWith("--")).ToArray();
 int seconds = args.Length > 0 ? int.Parse(args[0], CultureInfo.InvariantCulture) : 30;
@@ -31,7 +31,7 @@ if(window)
 	{
 		using var form = new Form
 		{
-			Text = $"Volumey test app {Environment.ProcessId}",
+			Text = $"VolumeyEx test app {Environment.ProcessId}",
 			Width = 320,
 			Height = 120,
 			StartPosition = FormStartPosition.CenterScreen,

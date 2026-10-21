@@ -1,6 +1,6 @@
 ﻿<#
 .SYNOPSIS
-  Starts processes that play silence, so Volumey shows them as apps in the mixer.
+  Starts processes that play silence, so VolumeyEx shows them as apps in the mixer.
 
 .DESCRIPTION
   Each process is a copy of scripts/test-audio-app under its own exe name (TestApp1.exe, TestApp2.exe, ...),
@@ -21,7 +21,7 @@ param(
     [int]$After = 3
 )
 $ErrorActionPreference = 'Stop'
-$root = Join-Path ([IO.Path]::GetTempPath()) 'Volumey-test-audio'
+$root = Join-Path ([IO.Path]::GetTempPath()) 'VolumeyEx-test-audio'
 $build = Join-Path $root 'build'
 $project = Join-Path $PSScriptRoot 'test-audio-app\TestAudioApp.csproj'
 

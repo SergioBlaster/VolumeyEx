@@ -1,0 +1,50 @@
+﻿#nullable enable
+using System;
+using log4net;
+using NAudio.CoreAudioApi;
+using VolumeyEx.ViewModel.Settings;
+
+namespace VolumeyEx.CoreAudioWrapper.Wrapper;
+
+/// <summary>
+/// Provides notification when an audio session is created.
+/// </summary>
+sealed class AudioSessionProvider : ISessionProvider
+{
+	public event Action<object, SessionCreatedEventArgs>? SessionCreated;
+	public event Action? DeviceInvalidated;
+	private readonly AudioSessionManager sessionManager;
+	private readonly IHotkeyService hotkeys;
+
+	internal AudioSessionProvider(AudioSessionManager sessionManager, IHotkeyService hotkeys)
+	{
+		this.hotkeys = hotkeys;
+		this.sessionManager = sessionManager;
+		this.sessionManager.OnSessionCreated += OnSessionCreated;
+	}
+
+	//NAudio raises it on a COM thread
+	private void OnSessionCreated(object sender, AudioSessionControl sessionControl)
+	{
+		try
+		{
+			var session = AudioModelFactory.CreateSessionModel(sessionControl);
+			if(session != null)
+				SessionCreated?.Invoke(this, new SessionCreatedEventArgs(session, sessionControl, hotkeys));
+		}
+		catch(AudioDeviceDisconnectedException e)
+		{
+			LogManager.GetLogger(typeof(AudioSessionProvider)).Info("A new audio session can't be read, the device was reconfigured", e);
+			DeviceInvalidated?.Invoke();
+		}
+		catch(Exception e)
+		{
+			LogManager.GetLogger(typeof(AudioSessionProvider)).Error("Failed to handle a new audio session", e);
+		}
+	}
+
+	public void Dispose()
+	{
+		sessionManager.OnSessionCreated -= OnSessionCreated;
+	}
+}

@@ -1,0 +1,38 @@
+﻿#nullable enable
+using System.Collections.Generic;
+using System.Globalization;
+using CommunityToolkit.Mvvm.ComponentModel;
+using VolumeyEx.DataProvider;
+using VolumeyEx.Localization;
+
+namespace VolumeyEx.ViewModel.Settings;
+
+public sealed class LangSettings : ObservableObject
+{
+	public static List<string> Languages => TranslationSource.Languages;
+
+	private string selectedLanguage = string.Empty;
+	public string SelectedLanguage
+	{
+		get => selectedLanguage;
+		set
+		{
+			if(selectedLanguage != value)
+			{
+				selectedLanguage = value;
+				TranslationSource.SetLanguage(value);
+				ErrorDictionary.UpdateErrorDictionary();
+				OnPropertyChanged();
+			}
+		}
+	}
+
+	internal LangSettings() => LoadLocalization();
+
+	private void LoadLocalization()
+	{
+		try { TranslationSource.SetLanguage(new CultureInfo(SettingsProvider.Settings.General.Language ?? TranslationSource.GetSystemLanguage())); }
+		catch { TranslationSource.SetDefaultLanguage(); }
+		finally { SelectedLanguage = TranslationSource.CurrentLanguageName; }
+	}
+}

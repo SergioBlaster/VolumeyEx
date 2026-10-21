@@ -1,11 +1,11 @@
 <#
 .SYNOPSIS
-    Builds and starts a Debug build of Volumey that is isolated from an installed Volumey and from the real settings.
+    Builds and starts a Debug build of VolumeyEx that is isolated from an installed VolumeyEx and from the real settings.
 
 .DESCRIPTION
     - Debug builds use their own single-instance mutex, so they run next to an installed release build.
-    - Settings go to -DataDir (VOLUMEY_SETTINGS_DIR) instead of %LOCALAPPDATA%\Volumey.
-    - log4net writes to <DataDir>\volumey.log (VOLUMEY_LOG_FILE), including unhandled exceptions.
+    - Settings go to -DataDir (VOLUMEYEX_SETTINGS_DIR) instead of %LOCALAPPDATA%\VolumeyEx.
+    - log4net writes to <DataDir>\volumeyex.log (VOLUMEYEX_LOG_FILE), including unhandled exceptions.
     A previous dev instance is stopped first, because it locks the exe.
 
 .EXAMPLE
@@ -14,7 +14,7 @@
 #>
 [CmdletBinding()]
 param(
-    [string]$DataDir = (Join-Path $env:TEMP 'Volumey-dev'),
+    [string]$DataDir = (Join-Path $env:TEMP 'VolumeyEx-dev'),
     [switch]$NoBuild,
     # copy the real 1.x settings file (appconfig) into DataDir and drop settings.json, so the importer runs
     [switch]$ImportRealSettings,
@@ -25,17 +25,17 @@ param(
 $ErrorActionPreference = 'Stop'
 
 $repo = Split-Path $PSScriptRoot -Parent
-$project = Join-Path $repo 'Volumey\Volumey.csproj'
-$exe = Join-Path $repo 'Volumey\bin\x64\Debug\net10.0-windows10.0.19041.0\win-x64\Volumey.exe'
+$project = Join-Path $repo 'VolumeyEx\VolumeyEx.csproj'
+$exe = Join-Path $repo 'VolumeyEx\bin\x64\Debug\net10.0-windows10.0.19041.0\win-x64\VolumeyEx.exe'
 
-Get-Process Volumey -ErrorAction SilentlyContinue | Where-Object { $_.Path -eq $exe } | Stop-Process -Force
+Get-Process VolumeyEx -ErrorAction SilentlyContinue | Where-Object { $_.Path -eq $exe } | Stop-Process -Force
 Start-Sleep -Milliseconds 300
 
 if ($Reset -and (Test-Path $DataDir)) { Remove-Item $DataDir -Recurse -Force }
 New-Item -ItemType Directory -Force $DataDir | Out-Null
 
 if ($ImportRealSettings) {
-    Copy-Item (Join-Path $env:LOCALAPPDATA 'Volumey\appconfig') $DataDir -Force
+    Copy-Item (Join-Path $env:LOCALAPPDATA 'VolumeyEx\appconfig') $DataDir -Force
     Remove-Item (Join-Path $DataDir 'settings.json') -ErrorAction SilentlyContinue
 }
 
@@ -44,12 +44,12 @@ if (-not $NoBuild) {
     if ($LASTEXITCODE) { throw 'Build failed' }
 }
 
-$log = Join-Path $DataDir 'volumey.log'
+$log = Join-Path $DataDir 'volumeyex.log'
 $psi = [System.Diagnostics.ProcessStartInfo]::new($exe)
 $psi.UseShellExecute = $false
 $psi.WorkingDirectory = Split-Path $exe
-$psi.Environment['VOLUMEY_SETTINGS_DIR'] = $DataDir
-$psi.Environment['VOLUMEY_LOG_FILE'] = $log
+$psi.Environment['VOLUMEYEX_SETTINGS_DIR'] = $DataDir
+$psi.Environment['VOLUMEYEX_LOG_FILE'] = $log
 if ($Minimized) { $psi.ArgumentList.Add('-minimized') }
 $process = [System.Diagnostics.Process]::Start($psi)
 

@@ -1,0 +1,24 @@
+﻿#nullable enable
+using System.Collections.Generic;
+using VolumeyEx.Model;
+using WpfScreenHelper;
+
+namespace VolumeyEx.DataProvider;
+
+public sealed class ScreenInfoProvider : IScreenInfoProvider
+{
+	public IEnumerable<ScreenInfo> GetAllScreensInfo()
+	{
+		List<ScreenInfo> screens = new List<ScreenInfo>();
+
+		foreach(var screen in Screen.AllScreens)
+		{
+			var current = new ScreenInfo(screen.DeviceName, screen.Primary, screen.WorkingArea.Width, screen.WorkingArea.Height,
+											screen.Bounds.Width, screen.Bounds.Height,
+											screen.WorkingArea.Left, screen.WorkingArea.Right,
+											screen.WorkingArea.Top, screen.WorkingArea.Bottom, screen.ScaleFactor);
+			screens.Add(current);
+		}
+		return screens;
+	}
+}

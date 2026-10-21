@@ -1,0 +1,35 @@
+﻿#nullable enable
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using VolumeyEx.Localization;
+
+namespace VolumeyEx.ViewModel.Settings;
+
+public enum ErrorMessageType { VolumeReg, Diff, OpenReg, HotkeyExists, F12, Missing, NeedsBoth, FormatRefused, SettingFailed, None }
+
+public static class ErrorDictionary
+{
+	private static readonly Dictionary<ErrorMessageType, string> instance =
+		new Dictionary<ErrorMessageType, string>();
+
+	internal static IReadOnlyDictionary<ErrorMessageType, string> Instance => instance;
+	internal static event Action? LanguageChanged;
+
+	internal static void UpdateErrorDictionary()
+	{
+		try
+		{
+			instance.Clear();
+			foreach(var error in Enum.GetValues(typeof(ErrorMessageType)).Cast<ErrorMessageType>())
+			{
+				if(error != ErrorMessageType.None)
+					instance.Add(error, TranslationSource.Instance[$"Error_{error.ToString()}"] ?? string.Empty);
+			}
+
+			LanguageChanged?.Invoke();
+		}
+		catch { }
+	}
+
+}

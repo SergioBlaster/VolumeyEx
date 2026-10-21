@@ -3,12 +3,12 @@
   Logs whether a process is alive and its UI thread answers, every 2 s, to a file. For hang tests (e.g. sleep and wake, #57).
 
 .DESCRIPTION
-  Sends WM_NULL to the process's first top-level window with a 1 s timeout, which also works while Volumey is hidden in the tray
+  Sends WM_NULL to the process's first top-level window with a 1 s timeout, which also works while VolumeyEx is hidden in the tray
   (Process.Responding only checks a visible main window). Writes every change plus a heartbeat once a minute; a gap in the
   heartbeats shows the time the PC was asleep. Stops when the process exits.
 
 .EXAMPLE
-  Start-Process pwsh -WindowStyle Hidden -ArgumentList '-NoProfile','-File','scripts/watch-responsiveness.ps1','-ProcessId',(Get-Process Volumey).Id,'-Out',"$env:TEMP\watchdog.log"
+  Start-Process pwsh -WindowStyle Hidden -ArgumentList '-NoProfile','-File','scripts/watch-responsiveness.ps1','-ProcessId',(Get-Process VolumeyEx).Id,'-Out',"$env:TEMP\watchdog.log"
 #>
 param([int]$ProcessId, [string]$Out)
 Add-Type @'

@@ -1,0 +1,15 @@
+﻿#nullable enable
+using VolumeyEx.ViewModel.Pages;
+
+namespace VolumeyEx.View.SettingsPage;
+
+public sealed partial class DevicesPage
+{
+	internal DevicesPage(DevicesPageViewModel vm)
+	{
+		DataContext = vm;
+		InitializeComponent();
+		//the settings window is hidden, not closed, so Unloaded doesn't come when it closes
+		IsVisibleChanged += (_, e) => vm.DefaultDevice.SetPageShown((bool)e.NewValue);
+	}
+}

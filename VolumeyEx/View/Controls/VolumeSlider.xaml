@@ -1,0 +1,132 @@
+﻿<ResourceDictionary
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:controls="clr-namespace:VolumeyEx.Controls">
+
+    <!-- the part of the track left of the thumb: the accent fill of Windows 11's sliders (WPF-UI 4.3's slider has none) -->
+    <Style x:Key="VolumeSliderFillButton" TargetType="RepeatButton" BasedOn="{StaticResource UiSliderButtonStyle}">
+        <Setter Property="Background" Value="{DynamicResource AccentFillColorDefaultBrush}" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="RepeatButton">
+                    <Border Height="4"
+                            CornerRadius="2"
+                            Background="{TemplateBinding Background}" />
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <!-- the thumb as in Windows 11's volume flyout: a 10 px inner circle in the fill's accent
+         color that keeps its color, grows to 14 px while the pointer is over it and shrinks while dragging;
+         WPF-UI's thumb is 12 px in a darker accent and changes color on hover instead -->
+    <Style x:Key="VolumeSliderThumb" TargetType="Thumb" BasedOn="{StaticResource UiSliderThumbStyle}">
+        <Setter Property="Foreground" Value="{DynamicResource AccentFillColorDefaultBrush}" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="Thumb">
+                    <Border Background="{TemplateBinding Background}"
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            BorderThickness="{TemplateBinding BorderThickness}"
+                            CornerRadius="16">
+                        <Ellipse x:Name="Inner"
+                                 Width="10"
+                                 Height="10"
+                                 Fill="{TemplateBinding Foreground}"
+                                 RenderTransformOrigin="0.5 0.5">
+                            <Ellipse.RenderTransform>
+                                <ScaleTransform ScaleX="1" ScaleY="1" />
+                            </Ellipse.RenderTransform>
+                        </Ellipse>
+                    </Border>
+                    <ControlTemplate.Resources>
+                        <Storyboard x:Key="Grow">
+                            <DoubleAnimation Storyboard.TargetName="Inner" Storyboard.TargetProperty="RenderTransform.ScaleX" To="1.4" Duration="0:0:0.083" />
+                            <DoubleAnimation Storyboard.TargetName="Inner" Storyboard.TargetProperty="RenderTransform.ScaleY" To="1.4" Duration="0:0:0.083" />
+                        </Storyboard>
+                        <Storyboard x:Key="Shrink">
+                            <DoubleAnimation Storyboard.TargetName="Inner" Storyboard.TargetProperty="RenderTransform.ScaleX" To="0.86" Duration="0:0:0.083" />
+                            <DoubleAnimation Storyboard.TargetName="Inner" Storyboard.TargetProperty="RenderTransform.ScaleY" To="0.86" Duration="0:0:0.083" />
+                        </Storyboard>
+                        <Storyboard x:Key="Normal">
+                            <DoubleAnimation Storyboard.TargetName="Inner" Storyboard.TargetProperty="RenderTransform.ScaleX" To="1" Duration="0:0:0.083" />
+                            <DoubleAnimation Storyboard.TargetName="Inner" Storyboard.TargetProperty="RenderTransform.ScaleY" To="1" Duration="0:0:0.083" />
+                        </Storyboard>
+                    </ControlTemplate.Resources>
+                    <ControlTemplate.Triggers>
+                        <MultiTrigger>
+                            <MultiTrigger.Conditions>
+                                <Condition Property="IsMouseOver" Value="True" />
+                                <Condition Property="IsDragging" Value="False" />
+                            </MultiTrigger.Conditions>
+                            <MultiTrigger.EnterActions>
+                                <BeginStoryboard Storyboard="{StaticResource Grow}" />
+                            </MultiTrigger.EnterActions>
+                            <MultiTrigger.ExitActions>
+                                <BeginStoryboard Storyboard="{StaticResource Normal}" />
+                            </MultiTrigger.ExitActions>
+                        </MultiTrigger>
+                        <Trigger Property="IsDragging" Value="True">
+                            <Trigger.EnterActions>
+                                <BeginStoryboard Storyboard="{StaticResource Shrink}" />
+                            </Trigger.EnterActions>
+                            <Trigger.ExitActions>
+                                <BeginStoryboard Storyboard="{StaticResource Normal}" />
+                            </Trigger.ExitActions>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <!-- WPF-UI's horizontal slider template plus the fill and the Windows 11 thumb -->
+    <ControlTemplate x:Key="VolumeSliderTemplate" TargetType="controls:VolumeSlider">
+        <Grid>
+            <Border x:Name="TrackBackground"
+                    Height="4"
+                    Background="{DynamicResource SliderTrackFill}"
+                    CornerRadius="2" />
+            <Track x:Name="PART_Track">
+                <Track.DecreaseRepeatButton>
+                    <RepeatButton x:Name="Fill" Command="Slider.DecreaseLarge" Style="{StaticResource VolumeSliderFillButton}" />
+                </Track.DecreaseRepeatButton>
+                <Track.Thumb>
+                    <Thumb x:Name="Thumb" Style="{StaticResource VolumeSliderThumb}" />
+                </Track.Thumb>
+                <Track.IncreaseRepeatButton>
+                    <RepeatButton Command="Slider.IncreaseLarge" Style="{StaticResource UiSliderButtonStyle}" />
+                </Track.IncreaseRepeatButton>
+            </Track>
+        </Grid>
+        <ControlTemplate.Triggers>
+            <Trigger Property="IsMouseOver" Value="True">
+                <Setter TargetName="TrackBackground" Property="Background" Value="{DynamicResource SliderTrackFillPointerOver}" />
+            </Trigger>
+            <!-- muted: the fill and the thumb in the disabled accent color, as Windows 11's volume mixer shows a muted app;
+                 the slider stays enabled, so it can still be dragged and reached by keyboard and screen readers -->
+            <Trigger Property="IsMuted" Value="True">
+                <Setter TargetName="Fill" Property="Background" Value="{DynamicResource AccentFillColorDisabledBrush}" />
+                <Setter TargetName="Thumb" Property="Foreground" Value="{DynamicResource AccentFillColorDisabledBrush}" />
+            </Trigger>
+        </ControlTemplate.Triggers>
+    </ControlTemplate>
+
+    <!-- WPF-UI's (Windows 11) slider with the fill; only the behavior is set here -->
+    <Style TargetType="controls:VolumeSlider" BasedOn="{StaticResource {x:Type Slider}}">
+        <Setter Property="Minimum" Value="0" />
+        <Setter Property="Maximum" Value="100" />
+        <Setter Property="SmallChange" Value="1" />
+        <Setter Property="IsMoveToPointEnabled" Value="True" />
+        <Setter Property="EnableMouseWheel" Value="True" />
+        <Setter Property="AutoToolTipPlacement" Value="TopLeft" />
+        <Setter Property="Stylus.IsPressAndHoldEnabled" Value="False" />
+        <Setter Property="VerticalAlignment" Value="Center" />
+        <Style.Triggers>
+            <!-- WPF-UI sets its template in an Orientation trigger, which a plain setter can't override -->
+            <Trigger Property="Orientation" Value="Horizontal">
+                <Setter Property="Template" Value="{StaticResource VolumeSliderTemplate}" />
+            </Trigger>
+        </Style.Triggers>
+    </Style>
+</ResourceDictionary>
