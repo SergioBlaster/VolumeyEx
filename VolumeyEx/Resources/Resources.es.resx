@@ -590,7 +590,7 @@
     <value>Solo una aplicación sonando a la vez</value>
   </data>
   <data name="AppHotkeys_SoloDescription" xml:space="preserve">
-    <value>Cada pulsación deja con sonido la siguiente aplicación que está sonando y silencia las demás, empezando por la que tiene el foco. Después de la última, todas vuelven a sonar.</value>
+    <value>Cada pulsación deja con sonido la siguiente aplicación que está sonando y silencia las demás, empezando por la que tiene el foco. Después de la última, vuelve a empezar por la primera. Desactívalo para que todas vuelvan a sonar.</value>
   </data>
   <data name="AppHotkeys_AllApps" xml:space="preserve">
     <value>Todas las aplicaciones</value>

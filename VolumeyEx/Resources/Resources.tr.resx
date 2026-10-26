@@ -590,7 +590,7 @@
     <value>Aynı anda yalnızca bir çalan uygulama</value>
   </data>
   <data name="AppHotkeys_SoloDescription" xml:space="preserve">
-    <value>Her basış, ses çalan bir sonraki uygulamayı duyulur bırakır ve diğerlerinin sesini kapatır; odaktaki uygulamadan başlar. Sonuncudan sonra hepsi yeniden duyulur.</value>
+    <value>Her basış, ses çalan bir sonraki uygulamayı duyulur bırakır ve diğerlerinin sesini kapatır; odaktaki uygulamadan başlar. Sonuncudan sonra yeniden ilkinden başlar. Hepsini yeniden duymak için kapatın.</value>
   </data>
   <data name="AppHotkeys_AllApps" xml:space="preserve">
     <value>Tüm uygulamalar</value>

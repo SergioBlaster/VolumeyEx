@@ -649,7 +649,7 @@
     <value>Only one playing app at a time</value>
   </data>
   <data name="AppHotkeys_SoloDescription" xml:space="preserve">
-    <value>Each press leaves the next app that is playing audible and mutes the others, starting with the app in focus. After the last one, all of them play again.</value>
+    <value>Each press leaves the next app that is playing audible and mutes the others, starting with the app in focus. After the last one, it starts over with the first. Turn it off to hear all of them again.</value>
   </data>
   <data name="AppHotkeys_AllApps" xml:space="preserve">
     <value>All apps</value>

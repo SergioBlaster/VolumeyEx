@@ -72,7 +72,7 @@ public class AppMuteSwitcherTests
 	}
 
 	[TestMethod]
-	public void TheSoloRoundGoesThroughThePlayingAppsThenAllPlayAgain()
+	public void TheSoloRoundGoesThroughThePlayingAppsRoundAndRound()
 	{
 		App("A");
 		App("B");
@@ -88,14 +88,29 @@ public class AppMuteSwitcherTests
 		Assert.AreEqual("C", switcher.SoloNext(NoForeground)!.Name);
 		Assert.AreEqual("Quiet,C,Sounds", Audible());
 
-		//after the last one: "all"
-		Assert.IsNull(switcher.SoloNext(NoForeground));
-		Assert.AreEqual("A,B,Quiet,C,Sounds", Audible());
-		Assert.IsNull(switcher.SoloApp);
+		//after the last one the first again: no "all" step
+		Assert.AreEqual("A", switcher.SoloNext(NoForeground)!.Name);
+		Assert.AreEqual("A,Quiet,Sounds", Audible());
+		Assert.IsTrue(switcher.SoloOn);
 	}
 
 	[TestMethod]
-	public void TheFirstPressStartsWithTheForegroundAppAndTheNextRoundWithTheFirst()
+	public void EndingTheRoundGivesTheStatesBack()
+	{
+		App("A");
+		App("B");
+		App("C", muted: true);
+		switcher.SoloNext(NoForeground);
+		switcher.SoloNext(NoForeground);
+
+		switcher.RestoreSolo();
+
+		Assert.AreEqual("A,B", Audible());
+		Assert.IsFalse(switcher.SoloOn);
+	}
+
+	[TestMethod]
+	public void TheFirstPressStartsWithTheForegroundApp()
 	{
 		App("A");
 		var b = App("B");
@@ -104,7 +119,6 @@ public class AppMuteSwitcherTests
 
 		Assert.AreEqual("B", switcher.SoloNext(isB)!.Name);
 		Assert.AreEqual("C", switcher.SoloNext(isB)!.Name);
-		Assert.IsNull(switcher.SoloNext(isB));
 		//the round goes on in order: A, not the foreground app again
 		Assert.AreEqual("A", switcher.SoloNext(isB)!.Name);
 	}
@@ -118,7 +132,7 @@ public class AppMuteSwitcherTests
 		Assert.AreEqual("A", switcher.SoloNext(NoForeground)!.Name);
 		Assert.AreEqual("B", switcher.SoloNext(NoForeground)!.Name);
 		Assert.AreEqual("B", Audible());
-		Assert.IsNull(switcher.SoloNext(NoForeground));
+		switcher.RestoreSolo();
 
 		Assert.AreEqual("A", Audible());
 	}
@@ -172,8 +186,6 @@ public class AppMuteSwitcherTests
 		Assert.IsTrue(b.IsMuted);
 
 		apps.Remove(b);
-		switcher.SoloNext(NoForeground);
-		Assert.IsNull(switcher.SoloApp);
 
 		//Windows starts it muted: it kept the mute of the app
 		var again = App("B", muted: true);
@@ -199,7 +211,7 @@ public class AppMuteSwitcherTests
 
 		Assert.AreEqual("B", switcher.SoloNext(NoForeground)!.Name);
 		Assert.AreEqual("C", switcher.SoloNext(NoForeground)!.Name);
-		Assert.IsNull(switcher.SoloNext(NoForeground));
+		switcher.RestoreSolo();
 		//the round's end gives the states from before the round: C was muted
 		Assert.AreEqual("A,B", Audible());
 	}

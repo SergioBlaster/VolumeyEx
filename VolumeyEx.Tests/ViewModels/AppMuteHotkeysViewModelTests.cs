@@ -72,8 +72,9 @@ public class AppMuteHotkeysViewModelTests : ViewModelTestBase
 		Assert.AreEqual("A", Audible());
 		PressHotkey(Solo);
 		Assert.AreEqual("B", Audible());
+		//round and round: no "all" step
 		PressHotkey(Solo);
-		Assert.AreEqual("A,B", Audible());
+		Assert.AreEqual("A", Audible());
 	}
 
 	[TestMethod]
@@ -161,7 +162,7 @@ public class AppMuteHotkeysViewModelTests : ViewModelTestBase
 	}
 
 	[TestMethod]
-	public void TheEndOfTheRoundShowsAllAppsPlaying()
+	public void EachPressShowsTheAudibleApp()
 	{
 		Settings.Notifications.Enabled = true;
 		Settings.Hotkeys.SoloPlayingApp = Solo;
@@ -173,7 +174,7 @@ public class AppMuteHotkeysViewModelTests : ViewModelTestBase
 		PressHotkey(Solo);
 		PressHotkey(Solo);
 
-		CollectionAssert.AreEqual(new[] { ("100", false, 50), ("101", false, 50), ("VolumeyEx.AllApps", false, 70) }, shown);
+		CollectionAssert.AreEqual(new[] { ("100", false, 50), ("101", false, 50), ("100", false, 50) }, shown);
 	}
 
 	[TestMethod]

@@ -178,19 +178,12 @@ public sealed partial class AppMuteHotkeysViewModel : HotkeyViewModel
 			}
 			else if(soloRegistered && hotkey.Equals(SoloKey))
 			{
-				bool roundWasOn = switcher.SoloOn;
 				var app = switcher.SoloNext(ForegroundMatcher());
 				if(app != null)
 				{
 					Logger.Info($"Only [{app.Name}] is audible");
 					if(SettingsProvider.Settings.Notifications.Enabled)
 						notifications.ShowNotification(app);
-				}
-				else if(roundWasOn)
-				{
-					Logger.Info("Solo round ended: the apps got their mute states back");
-					//all apps play again
-					ShowAllAppsNotification();
 				}
 				else
 					Logger.Info("Solo: no app is playing");
