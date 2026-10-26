@@ -592,4 +592,7 @@
   <data name="AppHotkeys_SoloDescription" xml:space="preserve">
     <value>每按一次，下一个正在播放的应用保持有声，其余应用静音，从处于焦点的应用开始。最后一个之后，所有应用恢复播放。</value>
   </data>
+  <data name="AppHotkeys_AllApps" xml:space="preserve">
+    <value>所有应用</value>
+  </data>
 </root>

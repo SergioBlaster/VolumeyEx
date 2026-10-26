@@ -118,6 +118,79 @@ public class AppMuteHotkeysViewModelTests : ViewModelTestBase
 		Notifications.Verify(m => m.ShowNotification(a), Times.Once);
 	}
 
+	/// <summary>The notifications shown: the OSD's id and its mute state when it was shown</summary>
+	private System.Collections.Generic.List<(string id, bool muted, int volume)> RecordNotifications()
+	{
+		var shown = new System.Collections.Generic.List<(string, bool, int)>();
+		Notifications.Setup(m => m.ShowNotification(It.IsAny<IManagedMasterAudioSession>()))
+			.Callback<IManagedMasterAudioSession>(s => shown.Add((s.Id, s.IsMuted, s.Volume)));
+		return shown;
+	}
+
+	[TestMethod]
+	public void MuteAllShowsTheAllAppsNotification()
+	{
+		Settings.Notifications.Enabled = true;
+		Settings.Hotkeys.MuteAllApps = MuteAll;
+		var shown = RecordNotifications();
+		Create();
+		ActivateHotkeys();
+
+		PressHotkey(MuteAll);
+		PressHotkey(MuteAll);
+
+		//the device's volume, muted while all apps are muted
+		CollectionAssert.AreEqual(new[] { ("VolumeyEx.AllApps", true, 70), ("VolumeyEx.AllApps", false, 70) }, shown);
+	}
+
+	[TestMethod]
+	public void TheNotificationsMuteButtonTurnsMuteAllOff()
+	{
+		Settings.Notifications.Enabled = true;
+		Settings.Hotkeys.MuteAllApps = MuteAll;
+		IManagedMasterAudioSession osd = null;
+		Notifications.Setup(m => m.ShowNotification(It.IsAny<IManagedMasterAudioSession>())).Callback<IManagedMasterAudioSession>(s => osd = s);
+		Create();
+		ActivateHotkeys();
+		PressHotkey(MuteAll);
+
+		osd.MuteCommand.Execute(null);
+
+		Assert.AreEqual("A,B", Audible());
+		Assert.IsFalse(osd.IsMuted);
+	}
+
+	[TestMethod]
+	public void TheEndOfTheRoundShowsAllAppsPlaying()
+	{
+		Settings.Notifications.Enabled = true;
+		Settings.Hotkeys.SoloPlayingApp = Solo;
+		var shown = RecordNotifications();
+		Create();
+		ActivateHotkeys();
+
+		PressHotkey(Solo);
+		PressHotkey(Solo);
+		PressHotkey(Solo);
+
+		CollectionAssert.AreEqual(new[] { ("100", false, 50), ("101", false, 50), ("VolumeyEx.AllApps", false, 70) }, shown);
+	}
+
+	[TestMethod]
+	public void NoNotificationWhileNotificationsAreOff()
+	{
+		Settings.Notifications.Enabled = false;
+		Settings.Hotkeys.MuteAllApps = MuteAll;
+		Settings.Hotkeys.SoloPlayingApp = Solo;
+		Create();
+		ActivateHotkeys();
+
+		PressHotkey(MuteAll);
+		PressHotkey(Solo);
+
+		Notifications.Verify(m => m.ShowNotification(It.IsAny<IManagedMasterAudioSession>()), Times.Never);
+	}
+
 	[TestMethod]
 	public void TurningTheHotkeyOffGivesTheStatesBack()
 	{

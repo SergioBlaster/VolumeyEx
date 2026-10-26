@@ -118,7 +118,8 @@
         <Setter Property="Maximum" Value="100" />
         <Setter Property="SmallChange" Value="1" />
         <Setter Property="IsMoveToPointEnabled" Value="True" />
-        <Setter Property="EnableMouseWheel" Value="True" />
+        <!-- the mouse wheel doesn't change a volume: it scrolls the list or page under it -->
+        <Setter Property="EnableMouseWheel" Value="False" />
         <Setter Property="AutoToolTipPlacement" Value="TopLeft" />
         <Setter Property="Stylus.IsPressAndHoldEnabled" Value="False" />
         <Setter Property="VerticalAlignment" Value="Center" />

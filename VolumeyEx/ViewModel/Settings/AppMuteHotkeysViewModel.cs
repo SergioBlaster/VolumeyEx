@@ -78,6 +78,8 @@ public sealed partial class AppMuteHotkeysViewModel : HotkeyViewModel
 	}
 
 	private readonly AppMuteSwitcher switcher = new AppMuteSwitcher();
+	//what the OSD shows for mute all
+	private readonly AllAppsSession allApps;
 	private readonly IDeviceProvider deviceProvider;
 	private readonly INotificationService notifications;
 	private readonly IAppShell shell;
@@ -88,6 +90,7 @@ public sealed partial class AppMuteHotkeysViewModel : HotkeyViewModel
 		this.deviceProvider = deviceProvider;
 		this.notifications = notifications;
 		this.shell = shell;
+		allApps = new AllAppsSession(() => deviceProvider.DefaultDevice?.Master, () => switcher.AllMuted, ToggleMuteAll);
 		ErrorDictionary.LanguageChanged += () =>
 		{
 			SetMuteAllError(muteAllErrorType);
@@ -170,21 +173,49 @@ public sealed partial class AppMuteHotkeysViewModel : HotkeyViewModel
 		{
 			if(muteAllRegistered && hotkey.Equals(MuteAllKey))
 			{
-				bool muted = switcher.ToggleMuteAll();
-				Logger.Info(muted ? "Muted all apps" : "Gave the apps their mute states back");
+				ToggleMuteAll();
+				ShowAllAppsNotification();
 			}
 			else if(soloRegistered && hotkey.Equals(SoloKey))
 			{
+				bool roundWasOn = switcher.SoloOn;
 				var app = switcher.SoloNext(ForegroundMatcher());
-				Logger.Info(app != null ? $"Only [{app.Name}] is audible" : "Solo round ended: the apps got their mute states back");
-				if(app != null && SettingsProvider.Settings.Notifications.Enabled)
-					notifications.ShowNotification(app);
+				if(app != null)
+				{
+					Logger.Info($"Only [{app.Name}] is audible");
+					if(SettingsProvider.Settings.Notifications.Enabled)
+						notifications.ShowNotification(app);
+				}
+				else if(roundWasOn)
+				{
+					Logger.Info("Solo round ended: the apps got their mute states back");
+					//all apps play again
+					ShowAllAppsNotification();
+				}
+				else
+					Logger.Info("Solo: no app is playing");
 			}
 		}
 		catch(Exception e)
 		{
 			Logger.Error("Failed to change the apps' mute states", e);
 		}
+	}
+
+	//from the hotkey and from the OSD's mute button
+	private void ToggleMuteAll()
+	{
+		bool muted = switcher.ToggleMuteAll();
+		Logger.Info(muted ? "Muted all apps" : "Gave the apps their mute states back");
+	}
+
+	/// <summary>The OSD of all apps: the default device's icon and volume, muted while mute all is on</summary>
+	private void ShowAllAppsNotification()
+	{
+		if(!SettingsProvider.Settings.Notifications.Enabled || deviceProvider.DefaultDevice == null)
+			return;
+		allApps.Refresh();
+		notifications.ShowNotification(allApps);
 	}
 
 	/// <summary>

@@ -592,4 +592,7 @@
   <data name="AppHotkeys_SoloDescription" xml:space="preserve">
     <value>A cada toque, o próximo aplicativo que está tocando fica com som e os outros ficam mudos, começando pelo aplicativo em foco. Depois do último, todos voltam a tocar.</value>
   </data>
+  <data name="AppHotkeys_AllApps" xml:space="preserve">
+    <value>Todos os aplicativos</value>
+  </data>
 </root>

@@ -592,4 +592,7 @@
   <data name="AppHotkeys_SoloDescription" xml:space="preserve">
     <value>हर बार दबाने पर अगला बजता हुआ ऐप सुनाई देता है और बाकी म्यूट हो जाते हैं, फ़ोकस वाले ऐप से शुरू करके। आख़िरी के बाद सभी फिर से बजते हैं।</value>
   </data>
+  <data name="AppHotkeys_AllApps" xml:space="preserve">
+    <value>सभी ऐप्स</value>
+  </data>
 </root>

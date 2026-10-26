@@ -592,4 +592,7 @@
   <data name="AppHotkeys_SoloDescription" xml:space="preserve">
     <value>押すたびに、再生中の次のアプリだけが聞こえ、ほかはミュートされます。最初はフォーカスがあるアプリから始まります。最後のアプリの後は、すべてが再び聞こえます。</value>
   </data>
+  <data name="AppHotkeys_AllApps" xml:space="preserve">
+    <value>すべてのアプリ</value>
+  </data>
 </root>

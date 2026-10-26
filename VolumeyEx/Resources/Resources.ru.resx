@@ -592,4 +592,7 @@
   <data name="AppHotkeys_SoloDescription" xml:space="preserve">
     <value>Каждое нажатие оставляет слышным следующее воспроизводящее приложение и отключает остальные, начиная с приложения в фокусе. После последнего снова слышны все.</value>
   </data>
+  <data name="AppHotkeys_AllApps" xml:space="preserve">
+    <value>Все приложения</value>
+  </data>
 </root>

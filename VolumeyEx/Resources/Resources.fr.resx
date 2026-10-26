@@ -592,4 +592,7 @@
   <data name="AppHotkeys_SoloDescription" xml:space="preserve">
     <value>Chaque appui laisse audible l'application suivante qui joue du son et coupe les autres, en commençant par l'application au premier plan. Après la dernière, toutes redeviennent audibles.</value>
   </data>
+  <data name="AppHotkeys_AllApps" xml:space="preserve">
+    <value>Toutes les applications</value>
+  </data>
 </root>

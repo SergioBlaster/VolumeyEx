@@ -651,4 +651,7 @@
   <data name="AppHotkeys_SoloDescription" xml:space="preserve">
     <value />
   </data>
+  <data name="AppHotkeys_AllApps" xml:space="preserve">
+    <value />
+  </data>
 </root>

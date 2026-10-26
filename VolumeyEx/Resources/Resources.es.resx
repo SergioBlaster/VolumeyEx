@@ -592,4 +592,7 @@
   <data name="AppHotkeys_SoloDescription" xml:space="preserve">
     <value>Cada pulsación deja con sonido la siguiente aplicación que está sonando y silencia las demás, empezando por la que tiene el foco. Después de la última, todas vuelven a sonar.</value>
   </data>
+  <data name="AppHotkeys_AllApps" xml:space="preserve">
+    <value>Todas las aplicaciones</value>
+  </data>
 </root>

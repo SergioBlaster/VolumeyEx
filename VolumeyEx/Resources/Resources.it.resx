@@ -592,4 +592,7 @@
   <data name="AppHotkeys_SoloDescription" xml:space="preserve">
     <value>Ogni pressione lascia udibile la prossima app in riproduzione e disattiva le altre, a partire dall'app attiva. Dopo l'ultima, tutte tornano udibili.</value>
   </data>
+  <data name="AppHotkeys_AllApps" xml:space="preserve">
+    <value>Tutte le app</value>
+  </data>
 </root>
