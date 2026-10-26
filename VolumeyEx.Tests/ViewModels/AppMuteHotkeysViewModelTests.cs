@@ -134,6 +134,23 @@ public class AppMuteHotkeysViewModelTests : ViewModelTestBase
 	}
 
 	[TestMethod]
+	public void TurningMuteAllOffDuringTheRoundKeepsTheRound()
+	{
+		Settings.Hotkeys.MuteAllApps = MuteAll;
+		Settings.Hotkeys.SoloPlayingApp = Solo;
+		var model = Create();
+		ActivateHotkeys();
+		PressHotkey(Solo);
+		PressHotkey(MuteAll);
+
+		model.MuteAllRegistered = false;
+
+		Assert.AreEqual("A", Audible());
+		PressHotkey(Solo);
+		Assert.AreEqual("B", Audible());
+	}
+
+	[TestMethod]
 	public void ExitingGivesTheStatesBack()
 	{
 		Settings.Hotkeys.SoloPlayingApp = Solo;

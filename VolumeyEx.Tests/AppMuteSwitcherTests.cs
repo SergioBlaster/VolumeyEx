@@ -181,14 +181,53 @@ public class AppMuteSwitcherTests
 	}
 
 	[TestMethod]
-	public void MuteAllDuringTheRoundGivesTheStatesFromBeforeTheRoundBack()
+	public void MuteAllDuringTheRoundGivesTheRoundsStateBackAndTheRoundGoesOn()
 	{
 		App("A");
 		App("B");
 		App("C", muted: true);
 		switcher.SoloNext(NoForeground);
+		Assert.AreEqual("A", Audible());
 
 		switcher.ToggleMuteAll();
+		Assert.AreEqual("", Audible());
+
+		//back to where the round was, not to before the round
+		switcher.ToggleMuteAll();
+		Assert.AreEqual("A", Audible());
+		Assert.IsTrue(switcher.SoloOn);
+
+		Assert.AreEqual("B", switcher.SoloNext(NoForeground)!.Name);
+		Assert.AreEqual("C", switcher.SoloNext(NoForeground)!.Name);
+		Assert.IsNull(switcher.SoloNext(NoForeground));
+		//the round's end gives the states from before the round: C was muted
+		Assert.AreEqual("A,B", Audible());
+	}
+
+	[TestMethod]
+	public void ASoloPressWhileAllAreMutedEndsMuteAllFirst()
+	{
+		App("A");
+		App("B");
+		App("Quiet", playing: false);
+		switcher.ToggleMuteAll();
+
+		Assert.AreEqual("A", switcher.SoloNext(NoForeground)!.Name);
+
+		Assert.IsFalse(switcher.AllMuted);
+		Assert.AreEqual("A,Quiet", Audible());
+	}
+
+	[TestMethod]
+	public void EndingTheRoundWhileAllAreMutedKeepsThemMutedUntilMuteAllIsPressedAgain()
+	{
+		App("A");
+		App("B");
+		App("C", muted: true);
+		switcher.SoloNext(NoForeground);
+		switcher.ToggleMuteAll();
+
+		switcher.RestoreSolo();
 		Assert.AreEqual("", Audible());
 
 		switcher.ToggleMuteAll();

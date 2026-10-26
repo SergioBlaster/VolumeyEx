@@ -49,8 +49,9 @@ public sealed partial class AppMuteHotkeysViewModel : HotkeyViewModel
 			{
 				muteAllRegistered = false;
 				Unregister(MuteAllKey, SetMuteAllError, () => SettingsProvider.Settings.Hotkeys.MuteAllApps = null);
+				//only what mute all changed: a solo round goes on
 				if(switcher.AllMuted)
-					switcher.Restore();
+					switcher.RestoreMuteAll();
 			}
 			OnPropertyChanged();
 		}
@@ -68,8 +69,9 @@ public sealed partial class AppMuteHotkeysViewModel : HotkeyViewModel
 			{
 				soloRegistered = false;
 				Unregister(SoloKey, SetSoloError, () => SettingsProvider.Settings.Hotkeys.SoloPlayingApp = null);
-				if(switcher.SoloApp != null)
-					switcher.Restore();
+				//only what the round changed: while mute all is on the apps stay muted
+				if(switcher.SoloOn)
+					switcher.RestoreSolo();
 			}
 			OnPropertyChanged();
 		}
