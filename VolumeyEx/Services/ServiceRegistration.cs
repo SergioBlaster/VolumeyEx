@@ -34,6 +34,7 @@ internal static class ServiceRegistration
 		typeof(AppVolumeSyncViewModel),
 		typeof(DefaultDeviceHotkeysViewModel),
 		typeof(ForegroundWindowVolumeViewModel),
+		typeof(AppMuteHotkeysViewModel),
 		typeof(NotificationViewModel),
 		typeof(SystemHotkeysViewModel),
 		typeof(AboutViewModel)
@@ -64,6 +65,7 @@ internal static class ServiceRegistration
 		services.AddSingleton(sp => new AppVolumeSyncViewModel(sp.Get<IDeviceProvider>()));
 		services.AddSingleton(sp => new DefaultDeviceHotkeysViewModel(sp.Get<IDeviceProvider>(), sp.Get<IHotkeyService>()));
 		services.AddSingleton(sp => new ForegroundWindowVolumeViewModel(sp.Get<IDeviceProvider>(), sp.Get<IHotkeyService>(), sp.Get<INotificationService>()));
+		services.AddSingleton(sp => new AppMuteHotkeysViewModel(sp.Get<IDeviceProvider>(), sp.Get<IHotkeyService>(), sp.Get<INotificationService>(), sp.Get<IAppShell>()));
 		services.AddSingleton(sp => new NotificationViewModel(sp.Get<IDeviceProvider>(), sp.Get<INotificationService>(), sp.Get<IScreenInfoProvider>()));
 		services.AddSingleton(sp => new SystemHotkeysViewModel(sp.Get<IHotkeyService>()));
 		services.AddSingleton(sp => new AboutViewModel(sp.Get<SupportLinks>()));
@@ -73,7 +75,7 @@ internal static class ServiceRegistration
 		services.AddSingleton(sp => new MixerPageViewModel(sp.Get<IHotkeyService>(), sp.Get<HotkeyModeViewModel>(), sp.Get<AppBehaviorViewModel>(),
 			sp.Get<OpenHotkeyViewModel>(), sp.Get<VolumeLimitViewModel>(), sp.Get<AppVolumeSyncViewModel>()));
 		services.AddSingleton(sp => new AppHotkeysPageViewModel(sp.Get<IHotkeyService>(), sp.Get<HotkeyModeViewModel>(), sp.Get<ForegroundWindowVolumeViewModel>(),
-			sp.Get<AppsHotkeysViewModel>()));
+			sp.Get<AppsHotkeysViewModel>(), sp.Get<AppMuteHotkeysViewModel>()));
 		services.AddSingleton(sp => new DevicesPageViewModel(sp.Get<IHotkeyService>(), sp.Get<HotkeyModeViewModel>(), sp.Get<DeviceVolumeHotkeysViewModel>(),
 			sp.Get<DefaultDeviceHotkeysViewModel>()));
 		services.AddSingleton(sp => new MediaKeysPageViewModel(sp.Get<IHotkeyService>(), sp.Get<HotkeyModeViewModel>(), sp.Get<SystemHotkeysViewModel>()));

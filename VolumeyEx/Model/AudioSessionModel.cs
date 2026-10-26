@@ -73,6 +73,17 @@ public sealed class AudioSessionModel : IManagedAudioSession
 
 	public ImageSource? IconSource { get; set; }
 
+	private volatile bool _isActive;
+	/// <summary>
+	/// The app has the session's stream open, i.e. it's playing (Windows' active state). A muted session stays active.
+	/// Set from Windows' state when the session is read, then kept current by its events (on COM threads)
+	/// </summary>
+	public bool IsActive
+	{
+		get => _isActive;
+		internal set => _isActive = value;
+	}
+
 	public ICommand MuteCommand { get; set; }
 
 	private readonly IAudioSessionStateNotifications sessionStateNotifications;
@@ -103,6 +114,7 @@ public sealed class AudioSessionModel : IManagedAudioSession
 		sessionStateNotifications.VolumeChanged += OnVolumeChanged;
 		sessionStateNotifications.SessionEnded += OnSessionEnded;
 		sessionStateNotifications.Deactivated += OnDeactivated;
+		sessionStateNotifications.Activated += OnActivated;
 		sessionStateNotifications.NameChanged += OnNameChanged;
 		sessionStateNotifications.Disconnected += OnDisconnected;
 
@@ -110,7 +122,12 @@ public sealed class AudioSessionModel : IManagedAudioSession
 	}
 
 	private void OnDeactivated()
-		=> Deactivated?.Invoke(this);
+	{
+		_isActive = false;
+		Deactivated?.Invoke(this);
+	}
+
+	private void OnActivated() => _isActive = true;
 
 	private void OnSessionEnded()
 		=> SessionEnded?.Invoke(this);
@@ -197,6 +214,7 @@ public sealed class AudioSessionModel : IManagedAudioSession
 		sessionStateNotifications.VolumeChanged -= OnVolumeChanged;
 		sessionStateNotifications.SessionEnded -= OnSessionEnded;
 		sessionStateNotifications.Deactivated -= OnDeactivated;
+		sessionStateNotifications.Activated -= OnActivated;
 		sessionStateNotifications.NameChanged -= OnNameChanged;
 		sessionStateNotifications.Disconnected -= OnDisconnected;
 		sessionStateNotifications.Dispose();

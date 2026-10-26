@@ -636,4 +636,19 @@
   <data name="Hotkeys_TakenByAnotherApp" xml:space="preserve">
     <value>Used by another app</value>
   </data>
+  <data name="AppHotkeys_MuteSection" xml:space="preserve">
+    <value>Mute all and one at a time</value>
+  </data>
+  <data name="AppHotkeys_MuteAll" xml:space="preserve">
+    <value>Mute all apps</value>
+  </data>
+  <data name="AppHotkeys_MuteAllDescription" xml:space="preserve">
+    <value>Press again to give each app back the state it had before. Apps that start while it's on are muted too.</value>
+  </data>
+  <data name="AppHotkeys_Solo" xml:space="preserve">
+    <value>Only one playing app at a time</value>
+  </data>
+  <data name="AppHotkeys_SoloDescription" xml:space="preserve">
+    <value>Each press leaves the next app that is playing audible and mutes the others, starting with the app in focus. After the last one, all of them play again.</value>
+  </data>
 </root>

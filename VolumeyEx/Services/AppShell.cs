@@ -16,7 +16,12 @@ internal sealed class AppShell : IAppShell
 	{
 		this.application = application;
 		this.application.SessionEnding += (s, e) => SessionEnding?.Invoke();
-		this.application.Exit += (s, e) => Exit?.Invoke();
+		this.application.Exit += (s, e) =>
+		{
+			//first: Exit's handlers release the devices
+			Exiting?.Invoke();
+			Exit?.Invoke();
+		};
 	}
 
 	public Dispatcher Dispatcher => application.Dispatcher;
@@ -24,6 +29,8 @@ internal sealed class AppShell : IAppShell
 	public bool StartMinimized => Startup.StartMinimized;
 
 	public event Action? SessionEnding;
+
+	public event Action? Exiting;
 
 	public event Action? Exit;
 

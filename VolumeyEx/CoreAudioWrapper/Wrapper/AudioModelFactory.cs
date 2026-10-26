@@ -291,6 +291,9 @@ internal static class AudioModelFactory
 															  groupingParam,
 															  sessionVolume,
 															  sessionStateNotifications);
+			//after registering: a change from now on comes as an event
+			try { session.IsActive = sControl.State == NAudio.CoreAudioApi.Interfaces.AudioSessionState.AudioSessionStateActive; }
+			catch { }
 			return session;
 		}
 		catch(Exception e)

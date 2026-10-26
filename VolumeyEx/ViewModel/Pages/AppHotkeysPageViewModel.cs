@@ -4,7 +4,7 @@ using VolumeyEx.ViewModel.Settings;
 namespace VolumeyEx.ViewModel.Pages;
 
 /// <summary>
-/// The App hotkeys settings page: the foreground app's hotkeys and the per-app list
+/// The App hotkeys settings page: the foreground app's hotkeys, mute all and the solo round, and the per-app list
 /// </summary>
 internal sealed class AppHotkeysPageViewModel
 {
@@ -17,12 +17,16 @@ internal sealed class AppHotkeysPageViewModel
 	public ForegroundWindowVolumeViewModel Foreground { get; }
 	public AppsHotkeysViewModel AppHotkeys { get; }
 
+	/// <summary>Mute all apps and the solo round</summary>
+	public AppMuteHotkeysViewModel AppMute { get; }
+
 	internal AppHotkeysPageViewModel(IHotkeyService hotkeys, HotkeyModeViewModel hotkeyMode, ForegroundWindowVolumeViewModel foreground,
-		AppsHotkeysViewModel appHotkeys)
+		AppsHotkeysViewModel appHotkeys, AppMuteHotkeysViewModel appMute)
 	{
 		Hotkeys = hotkeys;
 		HotkeyMode = hotkeyMode;
 		Foreground = foreground;
 		AppHotkeys = appHotkeys;
+		AppMute = appMute;
 	}
 }

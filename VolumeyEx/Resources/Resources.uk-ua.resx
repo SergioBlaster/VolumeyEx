@@ -577,4 +577,19 @@
   <data name="Hotkeys_TakenByAnotherApp" xml:space="preserve">
     <value>Використовується іншою програмою</value>
   </data>
+  <data name="AppHotkeys_MuteSection" xml:space="preserve">
+    <value>Вимкнути все й по одній</value>
+  </data>
+  <data name="AppHotkeys_MuteAll" xml:space="preserve">
+    <value>Вимкнути звук усіх програм</value>
+  </data>
+  <data name="AppHotkeys_MuteAllDescription" xml:space="preserve">
+    <value>Натисніть ще раз, щоб повернути кожній програмі попередній стан. Програми, запущені тим часом, теж вимикаються.</value>
+  </data>
+  <data name="AppHotkeys_Solo" xml:space="preserve">
+    <value>Лише одна програма, що відтворює звук</value>
+  </data>
+  <data name="AppHotkeys_SoloDescription" xml:space="preserve">
+    <value>Кожне натискання залишає чутною наступну програму, що відтворює звук, і вимикає інші, починаючи з програми у фокусі. Після останньої знову чутно всі.</value>
+  </data>
 </root>

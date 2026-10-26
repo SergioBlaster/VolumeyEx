@@ -577,4 +577,19 @@
   <data name="Hotkeys_TakenByAnotherApp" xml:space="preserve">
     <value>已被其他应用使用</value>
   </data>
+  <data name="AppHotkeys_MuteSection" xml:space="preserve">
+    <value>全部静音和逐个播放</value>
+  </data>
+  <data name="AppHotkeys_MuteAll" xml:space="preserve">
+    <value>将所有应用静音</value>
+  </data>
+  <data name="AppHotkeys_MuteAllDescription" xml:space="preserve">
+    <value>再次按下可将每个应用恢复到之前的状态。在此期间启动的应用也会静音。</value>
+  </data>
+  <data name="AppHotkeys_Solo" xml:space="preserve">
+    <value>一次只播放一个应用</value>
+  </data>
+  <data name="AppHotkeys_SoloDescription" xml:space="preserve">
+    <value>每按一次，下一个正在播放的应用保持有声，其余应用静音，从处于焦点的应用开始。最后一个之后，所有应用恢复播放。</value>
+  </data>
 </root>

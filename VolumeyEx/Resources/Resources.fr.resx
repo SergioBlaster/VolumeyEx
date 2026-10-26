@@ -577,4 +577,19 @@
   <data name="Hotkeys_TakenByAnotherApp" xml:space="preserve">
     <value>Utilisé par une autre application</value>
   </data>
+  <data name="AppHotkeys_MuteSection" xml:space="preserve">
+    <value>Tout couper et une à la fois</value>
+  </data>
+  <data name="AppHotkeys_MuteAll" xml:space="preserve">
+    <value>Couper le son de toutes les applications</value>
+  </data>
+  <data name="AppHotkeys_MuteAllDescription" xml:space="preserve">
+    <value>Appuyez à nouveau pour rendre à chaque application l'état qu'elle avait avant. Les applications qui démarrent entre-temps sont aussi coupées.</value>
+  </data>
+  <data name="AppHotkeys_Solo" xml:space="preserve">
+    <value>Une seule application audible à la fois</value>
+  </data>
+  <data name="AppHotkeys_SoloDescription" xml:space="preserve">
+    <value>Chaque appui laisse audible l'application suivante qui joue du son et coupe les autres, en commençant par l'application au premier plan. Après la dernière, toutes redeviennent audibles.</value>
+  </data>
 </root>

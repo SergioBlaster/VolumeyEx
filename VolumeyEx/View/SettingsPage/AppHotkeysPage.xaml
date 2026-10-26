@@ -88,6 +88,79 @@
                 </Grid>
             </ui:CardExpander>
 
+            <!-- mute all apps and the solo round: one hotkey each, edited while it's off; turning it on registers it -->
+            <TextBlock Text="{lc:Localization AppHotkeys_MuteSection}" Style="{StaticResource SectionHeader}" />
+            <StackPanel DataContext="{Binding AppMute}">
+                <ui:CardExpander Icon="{ui:SymbolIcon SpeakerMute24}" IsExpanded="True" Margin="0 0 0 4"
+                                 AutomationProperties.Name="{lc:Localization AppHotkeys_MuteAll}">
+                    <ui:CardExpander.Header>
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="Auto" />
+                            </Grid.ColumnDefinitions>
+                            <StackPanel VerticalAlignment="Center">
+                                <TextBlock Text="{lc:Localization AppHotkeys_MuteAll}" />
+                                <TextBlock Text="{Binding MuteAllError}" Style="{StaticResource SettingError}" />
+                            </StackPanel>
+                            <ui:ToggleSwitch Grid.Column="1"
+                                             Margin="16 0"
+                                             IsChecked="{Binding MuteAllRegistered}"
+                                             AutomationProperties.Name="{lc:Localization AppHotkeys_MuteAll}"
+                                             AutomationProperties.AutomationId="MuteAllToggle" />
+                        </Grid>
+                    </ui:CardExpander.Header>
+                    <Grid Margin="40 0 0 0">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="Auto" />
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Text="{lc:Localization AppHotkeys_MuteAllDescription}" Style="{StaticResource Caption}" TextWrapping="Wrap"
+                                   VerticalAlignment="Center" Margin="0 0 16 0" />
+                        <controls:HotKeyBox Grid.Column="1"
+                                            HotKey="{Binding MuteAllKey}"
+                                            IsEnabled="{Binding MuteAllRegistered, Converter={StaticResource NotRegisteredToEnabled}}"
+                                            VerticalAlignment="Center"
+                                            AutomationProperties.Name="{lc:Localization AppHotkeys_MuteAll}"
+                                            AutomationProperties.AutomationId="MuteAllBox" />
+                    </Grid>
+                </ui:CardExpander>
+                <ui:CardExpander Icon="{ui:SymbolIcon ArrowRepeatAll24}" IsExpanded="True" Margin="0"
+                                 AutomationProperties.Name="{lc:Localization AppHotkeys_Solo}">
+                    <ui:CardExpander.Header>
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="Auto" />
+                            </Grid.ColumnDefinitions>
+                            <StackPanel VerticalAlignment="Center">
+                                <TextBlock Text="{lc:Localization AppHotkeys_Solo}" />
+                                <TextBlock Text="{Binding SoloError}" Style="{StaticResource SettingError}" />
+                            </StackPanel>
+                            <ui:ToggleSwitch Grid.Column="1"
+                                             Margin="16 0"
+                                             IsChecked="{Binding SoloRegistered}"
+                                             AutomationProperties.Name="{lc:Localization AppHotkeys_Solo}"
+                                             AutomationProperties.AutomationId="SoloToggle" />
+                        </Grid>
+                    </ui:CardExpander.Header>
+                    <Grid Margin="40 0 0 0">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="Auto" />
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Text="{lc:Localization AppHotkeys_SoloDescription}" Style="{StaticResource Caption}" TextWrapping="Wrap"
+                                   VerticalAlignment="Center" Margin="0 0 16 0" />
+                        <controls:HotKeyBox Grid.Column="1"
+                                            HotKey="{Binding SoloKey}"
+                                            IsEnabled="{Binding SoloRegistered, Converter={StaticResource NotRegisteredToEnabled}}"
+                                            VerticalAlignment="Center"
+                                            AutomationProperties.Name="{lc:Localization AppHotkeys_Solo}"
+                                            AutomationProperties.AutomationId="SoloBox" />
+                    </Grid>
+                </ui:CardExpander>
+            </StackPanel>
+
             <Grid Margin="0 20 0 8" DataContext="{Binding AppHotkeys}">
                 <TextBlock Text="{lc:Localization AppHotkeys_Apps}" FontWeight="SemiBold" VerticalAlignment="Center" />
                 <ui:Button HorizontalAlignment="Right"

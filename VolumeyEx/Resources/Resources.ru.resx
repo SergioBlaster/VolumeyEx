@@ -577,4 +577,19 @@
   <data name="Hotkeys_TakenByAnotherApp" xml:space="preserve">
     <value>Используется другим приложением</value>
   </data>
+  <data name="AppHotkeys_MuteSection" xml:space="preserve">
+    <value>Отключить всё и по одному</value>
+  </data>
+  <data name="AppHotkeys_MuteAll" xml:space="preserve">
+    <value>Отключить звук всех приложений</value>
+  </data>
+  <data name="AppHotkeys_MuteAllDescription" xml:space="preserve">
+    <value>Нажмите ещё раз, чтобы вернуть каждому приложению прежнее состояние. Приложения, запущенные в это время, тоже отключаются.</value>
+  </data>
+  <data name="AppHotkeys_Solo" xml:space="preserve">
+    <value>Только одно воспроизводящее приложение</value>
+  </data>
+  <data name="AppHotkeys_SoloDescription" xml:space="preserve">
+    <value>Каждое нажатие оставляет слышным следующее воспроизводящее приложение и отключает остальные, начиная с приложения в фокусе. После последнего снова слышны все.</value>
+  </data>
 </root>

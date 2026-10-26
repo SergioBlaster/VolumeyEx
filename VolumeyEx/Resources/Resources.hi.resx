@@ -577,4 +577,19 @@
   <data name="Hotkeys_TakenByAnotherApp" xml:space="preserve">
     <value>किसी अन्य ऐप द्वारा उपयोग में है</value>
   </data>
+  <data name="AppHotkeys_MuteSection" xml:space="preserve">
+    <value>सभी म्यूट करें और एक बार में एक</value>
+  </data>
+  <data name="AppHotkeys_MuteAll" xml:space="preserve">
+    <value>सभी ऐप्स म्यूट करें</value>
+  </data>
+  <data name="AppHotkeys_MuteAllDescription" xml:space="preserve">
+    <value>हर ऐप को उसकी पहले वाली स्थिति वापस देने के लिए फिर से दबाएँ। इस बीच शुरू होने वाले ऐप्स भी म्यूट हो जाते हैं।</value>
+  </data>
+  <data name="AppHotkeys_Solo" xml:space="preserve">
+    <value>एक बार में केवल एक बजता हुआ ऐप</value>
+  </data>
+  <data name="AppHotkeys_SoloDescription" xml:space="preserve">
+    <value>हर बार दबाने पर अगला बजता हुआ ऐप सुनाई देता है और बाकी म्यूट हो जाते हैं, फ़ोकस वाले ऐप से शुरू करके। आख़िरी के बाद सभी फिर से बजते हैं।</value>
+  </data>
 </root>

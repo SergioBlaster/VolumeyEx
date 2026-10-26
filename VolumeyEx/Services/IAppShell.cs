@@ -22,6 +22,11 @@ public interface IAppShell
 	event Action? SessionEnding;
 
 	/// <summary>
+	/// The application is exiting, raised right before <see cref="Exit"/>: the audio devices still work
+	/// </summary>
+	event Action? Exiting;
+
+	/// <summary>
 	/// The application is exiting
 	/// </summary>
 	event Action? Exit;

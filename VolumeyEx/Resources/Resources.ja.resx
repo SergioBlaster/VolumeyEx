@@ -577,4 +577,19 @@
   <data name="Hotkeys_TakenByAnotherApp" xml:space="preserve">
     <value>別のアプリで使用されています</value>
   </data>
+  <data name="AppHotkeys_MuteSection" xml:space="preserve">
+    <value>すべてミュートと 1 つずつ</value>
+  </data>
+  <data name="AppHotkeys_MuteAll" xml:space="preserve">
+    <value>すべてのアプリをミュート</value>
+  </data>
+  <data name="AppHotkeys_MuteAllDescription" xml:space="preserve">
+    <value>もう一度押すと、各アプリが以前の状態に戻ります。その間に起動したアプリもミュートされます。</value>
+  </data>
+  <data name="AppHotkeys_Solo" xml:space="preserve">
+    <value>再生中のアプリを 1 つだけにする</value>
+  </data>
+  <data name="AppHotkeys_SoloDescription" xml:space="preserve">
+    <value>押すたびに、再生中の次のアプリだけが聞こえ、ほかはミュートされます。最初はフォーカスがあるアプリから始まります。最後のアプリの後は、すべてが再び聞こえます。</value>
+  </data>
 </root>

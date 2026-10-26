@@ -577,4 +577,19 @@
   <data name="Hotkeys_TakenByAnotherApp" xml:space="preserve">
     <value>Başka bir uygulama tarafından kullanılıyor</value>
   </data>
+  <data name="AppHotkeys_MuteSection" xml:space="preserve">
+    <value>Tümünü kapat ve teker teker</value>
+  </data>
+  <data name="AppHotkeys_MuteAll" xml:space="preserve">
+    <value>Tüm uygulamaların sesini kapat</value>
+  </data>
+  <data name="AppHotkeys_MuteAllDescription" xml:space="preserve">
+    <value>Her uygulamaya önceki durumunu geri vermek için yeniden basın. Bu sırada başlayan uygulamaların da sesi kapatılır.</value>
+  </data>
+  <data name="AppHotkeys_Solo" xml:space="preserve">
+    <value>Aynı anda yalnızca bir çalan uygulama</value>
+  </data>
+  <data name="AppHotkeys_SoloDescription" xml:space="preserve">
+    <value>Her basış, ses çalan bir sonraki uygulamayı duyulur bırakır ve diğerlerinin sesini kapatır; odaktaki uygulamadan başlar. Sonuncudan sonra hepsi yeniden duyulur.</value>
+  </data>
 </root>

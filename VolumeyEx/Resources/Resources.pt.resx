@@ -577,4 +577,19 @@
   <data name="Hotkeys_TakenByAnotherApp" xml:space="preserve">
     <value>Em uso por outro aplicativo</value>
   </data>
+  <data name="AppHotkeys_MuteSection" xml:space="preserve">
+    <value>Mutar todos e um de cada vez</value>
+  </data>
+  <data name="AppHotkeys_MuteAll" xml:space="preserve">
+    <value>Mutar todos os aplicativos</value>
+  </data>
+  <data name="AppHotkeys_MuteAllDescription" xml:space="preserve">
+    <value>Pressione de novo para devolver a cada aplicativo o estado que ele tinha antes. Aplicativos que começarem a tocar nesse meio-tempo também ficam mudos.</value>
+  </data>
+  <data name="AppHotkeys_Solo" xml:space="preserve">
+    <value>Só um aplicativo tocando por vez</value>
+  </data>
+  <data name="AppHotkeys_SoloDescription" xml:space="preserve">
+    <value>A cada toque, o próximo aplicativo que está tocando fica com som e os outros ficam mudos, começando pelo aplicativo em foco. Depois do último, todos voltam a tocar.</value>
+  </data>
 </root>

@@ -17,6 +17,7 @@ public sealed class AudioSessionStateNotifications : IAudioSessionStateNotificat
 {
 	public event Action? SessionEnded;
 	public event Action? Deactivated;
+	public event Action? Activated;
 	public event Action<VolumeChangedEventArgs>? VolumeChanged;
 	public event Action<string>? NameChanged;
 	public event Action<AudioSessionDisconnectReason>? Disconnected;
@@ -74,6 +75,8 @@ public sealed class AudioSessionStateNotifications : IAudioSessionStateNotificat
 			SessionEnded?.Invoke();
 		else if(newState == NAudioSessionState.AudioSessionStateInactive)
 			Deactivated?.Invoke();
+		else if(newState == NAudioSessionState.AudioSessionStateActive)
+			Activated?.Invoke();
 	}
 
 	public void RegisterNotifications()

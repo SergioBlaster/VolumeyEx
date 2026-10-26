@@ -148,6 +148,8 @@ public static class SettingsProvider
 			   Matches(hotkeys.DeviceMute) ||
 			   Matches(hotkeys.ForegroundVolumeUp) ||
 			   Matches(hotkeys.ForegroundVolumeDown) ||
+			   Matches(hotkeys.MuteAllApps) ||
+			   Matches(hotkeys.SoloPlayingApp) ||
 			   hotkeys.Apps.Any(app => Matches(app.VolumeUp) || Matches(app.VolumeDown)) ||
 			   hotkeys.DefaultDevices.Any(device => Matches(device.Hotkey)) ||
 			   hotkeys.System.Any(system => Matches(system.Replacement));

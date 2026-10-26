@@ -636,4 +636,19 @@
   <data name="Hotkeys_TakenByAnotherApp" xml:space="preserve">
     <value />
   </data>
+  <data name="AppHotkeys_MuteSection" xml:space="preserve">
+    <value />
+  </data>
+  <data name="AppHotkeys_MuteAll" xml:space="preserve">
+    <value />
+  </data>
+  <data name="AppHotkeys_MuteAllDescription" xml:space="preserve">
+    <value />
+  </data>
+  <data name="AppHotkeys_Solo" xml:space="preserve">
+    <value />
+  </data>
+  <data name="AppHotkeys_SoloDescription" xml:space="preserve">
+    <value />
+  </data>
 </root>

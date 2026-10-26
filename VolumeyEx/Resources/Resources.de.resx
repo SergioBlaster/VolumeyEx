@@ -577,4 +577,19 @@
   <data name="Hotkeys_TakenByAnotherApp" xml:space="preserve">
     <value>Wird von einer anderen App verwendet</value>
   </data>
+  <data name="AppHotkeys_MuteSection" xml:space="preserve">
+    <value>Alle stummschalten und eine nach der anderen</value>
+  </data>
+  <data name="AppHotkeys_MuteAll" xml:space="preserve">
+    <value>Alle Apps stummschalten</value>
+  </data>
+  <data name="AppHotkeys_MuteAllDescription" xml:space="preserve">
+    <value>Erneut drücken, um jeder App ihren vorherigen Zustand zurückzugeben. Apps, die in der Zwischenzeit starten, werden ebenfalls stummgeschaltet.</value>
+  </data>
+  <data name="AppHotkeys_Solo" xml:space="preserve">
+    <value>Nur eine wiedergebende App gleichzeitig</value>
+  </data>
+  <data name="AppHotkeys_SoloDescription" xml:space="preserve">
+    <value>Jeder Tastendruck lässt die nächste App, die gerade wiedergibt, hörbar und schaltet die anderen stumm, beginnend mit der App im Fokus. Nach der letzten sind wieder alle zu hören.</value>
+  </data>
 </root>

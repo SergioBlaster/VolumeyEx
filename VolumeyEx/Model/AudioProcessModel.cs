@@ -116,6 +116,23 @@ public sealed class AudioProcessModel : IManagedMasterAudioSession
 	public bool AnyHotkeyRegistered { get; private set; }
 
 	/// <summary>
+	/// Any of the app's sessions is playing (see <see cref="AudioSessionModel.IsActive"/>); a muted app that plays is still playing
+	/// </summary>
+	public bool IsPlaying
+	{
+		get
+		{
+			lock(_sessionsLock)
+			{
+				return Sessions.Any(s => s.IsActive);
+			}
+		}
+	}
+
+	/// <summary>The System Sounds session (Windows' own sounds, process 0)</summary>
+	public bool IsSystemSounds => _processId == 0;
+
+	/// <summary>
 	/// Session of the process which is used as reference to current process state i.e. its current volume and mute state 
 	/// </summary>
 	private AudioSessionModel? _trackedSession;

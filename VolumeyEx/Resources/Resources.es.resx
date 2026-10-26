@@ -577,4 +577,19 @@
   <data name="Hotkeys_TakenByAnotherApp" xml:space="preserve">
     <value>En uso por otra aplicación</value>
   </data>
+  <data name="AppHotkeys_MuteSection" xml:space="preserve">
+    <value>Silenciar todas y una a la vez</value>
+  </data>
+  <data name="AppHotkeys_MuteAll" xml:space="preserve">
+    <value>Silenciar todas las aplicaciones</value>
+  </data>
+  <data name="AppHotkeys_MuteAllDescription" xml:space="preserve">
+    <value>Vuelve a pulsar para devolver a cada aplicación el estado que tenía antes. Las aplicaciones que se inicien mientras tanto también se silencian.</value>
+  </data>
+  <data name="AppHotkeys_Solo" xml:space="preserve">
+    <value>Solo una aplicación sonando a la vez</value>
+  </data>
+  <data name="AppHotkeys_SoloDescription" xml:space="preserve">
+    <value>Cada pulsación deja con sonido la siguiente aplicación que está sonando y silencia las demás, empezando por la que tiene el foco. Después de la última, todas vuelven a sonar.</value>
+  </data>
 </root>

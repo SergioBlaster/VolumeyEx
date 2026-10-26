@@ -55,6 +55,10 @@ public sealed class HotkeySettings : SettingsSection
 	public HotKey? DeviceMute { get; set; }
 	public HotKey? ForegroundVolumeUp { get; set; }
 	public HotKey? ForegroundVolumeDown { get; set; }
+	/// <summary>Mutes every app of the default device, and gives each its state back (see <see cref="Model.AppMuteSwitcher"/>)</summary>
+	public HotKey? MuteAllApps { get; set; }
+	/// <summary>Leaves the next playing app the only audible one, round by round (see <see cref="Model.AppMuteSwitcher"/>)</summary>
+	public HotKey? SoloPlayingApp { get; set; }
 	public bool PreventResettingVolumeBalance { get; set; }
 	/// <summary>
 	/// True: hotkeys are registered with Windows and other apps don't get the keys (RegisterHotKey).
