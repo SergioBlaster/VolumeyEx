@@ -264,11 +264,13 @@ internal static class AudioModelFactory
 
 		//the app's name instead of the process's, as Windows' mixer shows it: e.g. "WhatsApp" for the msedgewebview2 process that
 		//plays its sound. The System Sounds session gets its own name with the app model (CreateProcessModel)
+		bool hasDisplayName = false;
 		if(processId != 0)
 		{
 			string? displayName = null;
 			try { displayName = sControl.DisplayName; }
 			catch { }
+			hasDisplayName = AppIdentity.ResolveDisplayName(displayName) != null;
 			name = AppIdentity.GetAppName(displayName, AppIdentity.GetPackage(processId), path, name);
 		}
 
@@ -290,7 +292,8 @@ internal static class AudioModelFactory
 															  filePath,
 															  groupingParam,
 															  sessionVolume,
-															  sessionStateNotifications);
+															  sessionStateNotifications)
+			{ HasDisplayName = hasDisplayName };
 			//after registering: a change from now on comes as an event
 			try { session.IsActive = sControl.State == NAudio.CoreAudioApi.Interfaces.AudioSessionState.AudioSessionStateActive; }
 			catch { }
@@ -349,7 +352,14 @@ internal static class AudioModelFactory
 		string? iconPath = null;
 		try { iconPath = sc.IconPath; }
 		catch { }
-		if(string.IsNullOrEmpty(iconPath))
+		return IconFromSessionIconPath(iconPath, name);
+	}
+
+	/// <summary>The icon at a session's icon path (see <see cref="TryExtractSessionIcon"/>), null if it's empty or can't be read</summary>
+	/// <param name="name">The app's name for the log</param>
+	internal static ImageSource? IconFromSessionIconPath(string? iconPath, string name)
+	{
+		if(string.IsNullOrWhiteSpace(iconPath))
 			return null;
 		//an indirect resource path ("@dll,-id") names the same icon without the "@"
 		iconPath = iconPath.TrimStart('@');

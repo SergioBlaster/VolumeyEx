@@ -137,6 +137,17 @@ public sealed class AudioProcessModel : IManagedMasterAudioSession
 	/// </summary>
 	private AudioSessionModel? _trackedSession;
 
+	/// <summary>
+	/// The session whose display name the app shows: the first one the app named (when it was read, or later with SetDisplayName).
+	/// An app that renames its session after creating it (e.g. GloboLiveWin's WebView2, first read as "Microsoft Edge WebView2")
+	/// gets the new name; another session's name doesn't replace it. When the session ends the name stays, and the next session
+	/// the app renames gives it again
+	/// </summary>
+	private AudioSessionModel? _nameSession;
+
+	/// <summary>The session whose icon the app shows once the app gave one a new icon, by the same rule as <see cref="_nameSession"/></summary>
+	private AudioSessionModel? _iconSession;
+
 	public IAudioProcessStateMediator? StateNotificationMediator { get; private set; }
 
 	private HotKey? _volumeUp;
@@ -194,10 +205,15 @@ public sealed class AudioProcessModel : IManagedMasterAudioSession
 			{
 				newSession.SessionEnded += OnSessionEnded;
 				newSession.Deactivated += OnSessionDeactivated;
+				newSession.DisplayNameChanged += OnSessionDisplayNameChanged;
+				newSession.IconChanged += OnSessionIconChanged;
 				Sessions.Add(newSession);
 				newSession.IconSource = IconSource;
 				if(Sessions.Count == 1)
 				{
+					//the app's name came from this session (see AudioModelFactory.CreateProcessModel)
+					if(newSession.HasDisplayName && _nameSession == null)
+						_nameSession = newSession;
 					Volume = newSession.Volume;
 					IsMuted = newSession.IsMuted;
 					GroupingParam = newSession.GroupingParam;
@@ -243,6 +259,32 @@ public sealed class AudioProcessModel : IManagedMasterAudioSession
 			if(!context.Equals(GuidValue.Internal.VolumeGUID))
 				StateNotificationMediator?.NotifyAudioStateChange(this);
 		}
+	}
+
+	//on the UI thread
+	private void OnSessionDisplayNameChanged(AudioSessionModel session, string displayName)
+	{
+		lock(_sessionsLock)
+		{
+			if(_nameSession != null && _nameSession != session)
+				return;
+			_nameSession = session;
+		}
+		Name = displayName;
+	}
+
+	//on the UI thread
+	private void OnSessionIconChanged(AudioSessionModel session, ImageSource icon)
+	{
+		lock(_sessionsLock)
+		{
+			if(_iconSession != null && _iconSession != session)
+				return;
+			_iconSession = session;
+			foreach(AudioSessionModel s in Sessions)
+				s.IconSource = icon;
+		}
+		IconSource = icon;
 	}
 
 	public bool SetVolumeHotkeys(HotKey? volUp, HotKey? volDown) => SetVolumeHotkeys(volUp, volDown, out _);
@@ -388,6 +430,8 @@ public sealed class AudioProcessModel : IManagedMasterAudioSession
 	{
 		endedSession.SessionEnded -= OnSessionEnded;
 		endedSession.Deactivated -= OnSessionDeactivated;
+		endedSession.DisplayNameChanged -= OnSessionDisplayNameChanged;
+		endedSession.IconChanged -= OnSessionIconChanged;
 		if(endedSession.EndedByFormatChange)
 			DeviceReconfigured?.Invoke(this);
 		await _dispatcher.InvokeAsync(() =>
@@ -395,6 +439,10 @@ public sealed class AudioProcessModel : IManagedMasterAudioSession
 			lock(_sessionsLock)
 			{
 				Sessions.Remove(endedSession);
+				if(_nameSession == endedSession)
+					_nameSession = null;
+				if(_iconSession == endedSession)
+					_iconSession = null;
 				if(Sessions.Count == 0)
 					InvokeExited();
 			}

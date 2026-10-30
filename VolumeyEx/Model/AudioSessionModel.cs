@@ -1,4 +1,4 @@
-#nullable enable
+﻿#nullable enable
 using System;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
@@ -73,6 +73,17 @@ public sealed class AudioSessionModel : IManagedAudioSession
 
 	public ImageSource? IconSource { get; set; }
 
+	/// <summary>
+	/// The app gave the session a display name of its own (IAudioSessionControl::SetDisplayName), when it was read or since
+	/// </summary>
+	internal bool HasDisplayName { get; set; }
+
+	/// <summary>The app gave the session a display name (not empty), raised on the UI thread after <see cref="Name"/> took it</summary>
+	internal event Action<AudioSessionModel, string>? DisplayNameChanged;
+
+	/// <summary>The app gave the session an icon that could be read, raised on the UI thread</summary>
+	internal event Action<AudioSessionModel, ImageSource>? IconChanged;
+
 	private volatile bool _isActive;
 	/// <summary>
 	/// The app has the session's stream open, i.e. it's playing (Windows' active state). A muted session stays active.
@@ -116,6 +127,7 @@ public sealed class AudioSessionModel : IManagedAudioSession
 		sessionStateNotifications.Deactivated += OnDeactivated;
 		sessionStateNotifications.Activated += OnActivated;
 		sessionStateNotifications.NameChanged += OnNameChanged;
+		sessionStateNotifications.IconPathChanged += OnIconPathChanged;
 		sessionStateNotifications.Disconnected += OnDisconnected;
 
 		MuteCommand = new ActionCommand(() => IsMuted = !IsMuted);
@@ -158,7 +170,20 @@ public sealed class AudioSessionModel : IManagedAudioSession
 	private void OnNameChanged(string newName)
 	{
 		if(AppIdentity.ResolveDisplayName(newName) is { } name)
-			dispatcher.InvokeAsync(() => { Name = name; });
+			dispatcher.InvokeAsync(() =>
+			{
+				HasDisplayName = true;
+				Name = name;
+				DisplayNameChanged?.Invoke(this, name);
+			});
+	}
+
+	//raised on a COM thread: the icon is read here (as when the session is created), and handed over on the UI thread.
+	//An empty or unreadable path keeps the current icon
+	private void OnIconPathChanged(string newIconPath)
+	{
+		if(AudioModelFactory.IconFromSessionIconPath(newIconPath, Name) is { } icon)
+			dispatcher.InvokeAsync(() => IconChanged?.Invoke(this, icon));
 	}
 
 	/// <summary>
@@ -216,7 +241,10 @@ public sealed class AudioSessionModel : IManagedAudioSession
 		sessionStateNotifications.Deactivated -= OnDeactivated;
 		sessionStateNotifications.Activated -= OnActivated;
 		sessionStateNotifications.NameChanged -= OnNameChanged;
+		sessionStateNotifications.IconPathChanged -= OnIconPathChanged;
 		sessionStateNotifications.Disconnected -= OnDisconnected;
 		sessionStateNotifications.Dispose();
+		DisplayNameChanged = null;
+		IconChanged = null;
 	}
 }

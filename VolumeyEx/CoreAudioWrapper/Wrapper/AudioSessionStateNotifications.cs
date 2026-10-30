@@ -20,6 +20,7 @@ public sealed class AudioSessionStateNotifications : IAudioSessionStateNotificat
 	public event Action? Activated;
 	public event Action<VolumeChangedEventArgs>? VolumeChanged;
 	public event Action<string>? NameChanged;
+	public event Action<string>? IconPathChanged;
 	public event Action<AudioSessionDisconnectReason>? Disconnected;
 	private readonly AudioSessionControl sessionControl;
 	private readonly SessionEchoFilter echoFilter;
@@ -38,8 +39,8 @@ public sealed class AudioSessionStateNotifications : IAudioSessionStateNotificat
 
 	public void OnGroupingParamChanged(ref Guid groupingId) { }
 
-	//a session's icon is read once when it's created; changes aren't shown
-	public void OnIconPathChanged(string newIconPath) { }
+	public void OnIconPathChanged(string newIconPath)
+		=> IconPathChanged?.Invoke(newIconPath);
 
 	public void OnSessionDisconnected(NAudioDisconnectReason disconnectReason)
 		=> Disconnected?.Invoke((AudioSessionDisconnectReason)disconnectReason);

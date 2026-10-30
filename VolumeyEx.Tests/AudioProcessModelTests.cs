@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Threading.Tasks;
@@ -449,6 +449,119 @@ public class AudioProcessModelTests
 		notifications.Raise(m => m.Deactivated += null);
 
 		Assert.IsTrue(exited.Wait(TimeSpan.FromSeconds(3)), "the model didn't look for its process's exit when its session went inactive");
+		model.Dispose();
+	}
+
+	private static void RunQueuedDispatcherWork()
+	{
+		var frame = new System.Windows.Threading.DispatcherFrame();
+		System.Windows.Threading.Dispatcher.CurrentDispatcher.BeginInvoke(System.Windows.Threading.DispatcherPriority.Background,
+			() => frame.Continue = false);
+		System.Windows.Threading.Dispatcher.PushFrame(frame);
+	}
+
+	[TestMethod]
+	public void TheAppTakesTheNameItsSessionGetsLater()
+	{
+		//e.g. GloboLiveWin renames its WebView2 session, first read as "Microsoft Edge WebView2"
+		var notifications = new Mock<IAudioSessionStateNotifications>();
+		var model = ModelWithoutProcessHandle(ExitedProcessId);
+		model.AddSession(SessionOf(ExitedProcessId, notifications.Object));
+		var changes = new System.Collections.Generic.List<string>();
+		model.PropertyChanged += (_, e) => changes.Add(e.PropertyName);
+
+		notifications.Raise(m => m.NameChanged += null, " GloboLiveWin ");
+		RunQueuedDispatcherWork();
+
+		Assert.AreEqual("GloboLiveWin", model.Name);
+		CollectionAssert.Contains(changes, nameof(AudioProcessModel.Name));
+		model.Dispose();
+	}
+
+	[TestMethod]
+	public void AClearedSessionNameKeepsTheAppsName()
+	{
+		var notifications = new Mock<IAudioSessionStateNotifications>();
+		var model = ModelWithoutProcessHandle(ExitedProcessId);
+		model.AddSession(SessionOf(ExitedProcessId, notifications.Object));
+
+		notifications.Raise(m => m.NameChanged += null, "  ");
+		RunQueuedDispatcherWork();
+
+		Assert.AreEqual("app", model.Name);
+		model.Dispose();
+	}
+
+	[TestMethod]
+	public void TheFirstSessionTheAppNamesGivesItsName()
+	{
+		var first = new Mock<IAudioSessionStateNotifications>();
+		var second = new Mock<IAudioSessionStateNotifications>();
+		var model = ModelWithoutProcessHandle(ExitedProcessId);
+		model.AddSession(SessionOf(ExitedProcessId, first.Object));
+		model.AddSession(SessionOf(ExitedProcessId, second.Object));
+
+		second.Raise(m => m.NameChanged += null, "Second");
+		RunQueuedDispatcherWork();
+		first.Raise(m => m.NameChanged += null, "First");
+		RunQueuedDispatcherWork();
+		Assert.AreEqual("Second", model.Name);
+
+		//the session that named the app may rename it again
+		second.Raise(m => m.NameChanged += null, "Second again");
+		RunQueuedDispatcherWork();
+		Assert.AreEqual("Second again", model.Name);
+		model.Dispose();
+	}
+
+	[TestMethod]
+	public void ASessionReadWithADisplayNameKeepsTheAppsName()
+	{
+		var other = new Mock<IAudioSessionStateNotifications>();
+		var model = ModelWithoutProcessHandle(ExitedProcessId);
+		var named = SessionOf(ExitedProcessId);
+		named.HasDisplayName = true;
+		model.AddSession(named);
+		model.AddSession(SessionOf(ExitedProcessId, other.Object));
+
+		other.Raise(m => m.NameChanged += null, "Other");
+		RunQueuedDispatcherWork();
+
+		Assert.AreEqual("app", model.Name);
+		model.Dispose();
+	}
+
+	[TestMethod]
+	public void TheAppTakesTheIconItsSessionGetsLater()
+	{
+		var notifications = new Mock<IAudioSessionStateNotifications>();
+		var model = ModelWithoutProcessHandle(ExitedProcessId);
+		var session = SessionOf(ExitedProcessId, notifications.Object);
+		model.AddSession(session);
+		Assert.IsNull(model.IconSource);
+
+		string notepad = System.IO.Path.Combine(Environment.SystemDirectory, "notepad.exe");
+		notifications.Raise(m => m.IconPathChanged += null, notepad + ",0");
+		RunQueuedDispatcherWork();
+
+		Assert.IsNotNull(model.IconSource);
+		Assert.AreSame(model.IconSource, session.IconSource);
+		model.Dispose();
+	}
+
+	[TestMethod]
+	public void AnUnreadableSessionIconKeepsTheAppsIcon()
+	{
+		var notifications = new Mock<IAudioSessionStateNotifications>();
+		var model = ModelWithoutProcessHandle(ExitedProcessId);
+		model.AddSession(SessionOf(ExitedProcessId, notifications.Object));
+
+		notifications.Raise(m => m.IconPathChanged += null, @"C:\does
+ot\exist.ico");
+		notifications.Raise(m => m.IconPathChanged += null, "");
+		RunQueuedDispatcherWork();
+
+		Assert.IsNull(model.IconSource);
 		model.Dispose();
 	}
 
