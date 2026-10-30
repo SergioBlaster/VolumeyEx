@@ -590,7 +590,7 @@
     <value>Alterna l'audio tra le app</value>
   </data>
   <data name="AppHotkeys_SoloDescription" xml:space="preserve">
-    <value>Ogni pressione lascia udibile solo la prossima app dell'elenco qui sotto e disattiva le altre dell'elenco, a partire dall'app attiva. Le altre app non vengono toccate. Dopo l'ultima, si ricomincia dalla prima. Disattivalo per restituire l'audio alle app.</value>
+    <value>Ogni pressione lascia udibile solo la prossima app dell'elenco qui sotto e disattiva le altre dell'elenco, a partire dall'app attiva. Le altre app non vengono toccate. Dopo l'ultima, tutte vengono disattivate e la pressione successiva ricomincia dalla prima. Disattivalo per restituire l'audio alle app.</value>
   </data>
   <data name="AppHotkeys_AllApps" xml:space="preserve">
     <value>Tutte le app</value>

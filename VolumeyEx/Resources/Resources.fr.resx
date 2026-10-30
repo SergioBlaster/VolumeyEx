@@ -590,7 +590,7 @@
     <value>Alterner le son entre les applications</value>
   </data>
   <data name="AppHotkeys_SoloDescription" xml:space="preserve">
-    <value>Chaque appui laisse audible seulement l'application suivante de la liste ci-dessous et coupe les autres de la liste, en commençant par l'application au premier plan. Les autres applications ne sont pas concernées. Après la dernière, on recommence par la première. Désactivez-le pour rendre le son aux applications.</value>
+    <value>Chaque appui laisse audible seulement l'application suivante de la liste ci-dessous et coupe les autres de la liste, en commençant par l'application au premier plan. Les autres applications ne sont pas concernées. Après la dernière, toutes sont coupées, et l'appui suivant recommence par la première. Désactivez-le pour rendre le son aux applications.</value>
   </data>
   <data name="AppHotkeys_AllApps" xml:space="preserve">
     <value>Toutes les applications</value>

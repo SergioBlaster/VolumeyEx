@@ -590,7 +590,7 @@
     <value>Sesi uygulamalar arasında değiştir</value>
   </data>
   <data name="AppHotkeys_SoloDescription" xml:space="preserve">
-    <value>Her basış, aşağıdaki listede yalnızca bir sonraki uygulamayı duyulur bırakır ve listedeki diğerlerinin sesini kapatır; odaktaki uygulamadan başlar. Diğer uygulamalar etkilenmez. Sonuncudan sonra yeniden ilkinden başlar. Uygulamalara seslerini geri vermek için kapatın.</value>
+    <value>Her basış, aşağıdaki listede yalnızca bir sonraki uygulamayı duyulur bırakır ve listedeki diğerlerinin sesini kapatır; odaktaki uygulamadan başlar. Diğer uygulamalar etkilenmez. Sonuncudan sonra hepsinin sesi kapanır ve sonraki basış yeniden ilkinden başlar. Uygulamalara seslerini geri vermek için kapatın.</value>
   </data>
   <data name="AppHotkeys_AllApps" xml:space="preserve">
     <value>Tüm uygulamalar</value>

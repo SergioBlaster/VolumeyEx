@@ -590,7 +590,7 @@
     <value>Alternar el sonido entre aplicaciones</value>
   </data>
   <data name="AppHotkeys_SoloDescription" xml:space="preserve">
-    <value>Cada pulsación deja con sonido solo la siguiente aplicación de la lista de abajo y silencia las demás de la lista, empezando por la que tiene el foco. Las demás aplicaciones no se ven afectadas. Después de la última, vuelve a empezar por la primera. Desactívalo para devolver el sonido a las aplicaciones.</value>
+    <value>Cada pulsación deja con sonido solo la siguiente aplicación de la lista de abajo y silencia las demás de la lista, empezando por la que tiene el foco. Las demás aplicaciones no se ven afectadas. Después de la última, todas se silencian y la siguiente pulsación vuelve a empezar por la primera. Desactívalo para devolver el sonido a las aplicaciones.</value>
   </data>
   <data name="AppHotkeys_AllApps" xml:space="preserve">
     <value>Todas las aplicaciones</value>

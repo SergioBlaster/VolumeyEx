@@ -590,7 +590,7 @@
     <value>Alternar o som entre aplicativos</value>
   </data>
   <data name="AppHotkeys_SoloDescription" xml:space="preserve">
-    <value>A cada toque, só o próximo aplicativo da lista abaixo fica com som e os outros da lista ficam mudos, começando pelo aplicativo em foco. Os demais aplicativos não são afetados. Depois do último, recomeça pelo primeiro. Desligue o atalho para devolver o som aos aplicativos.</value>
+    <value>A cada toque, só o próximo aplicativo da lista abaixo fica com som e os outros da lista ficam mudos, começando pelo aplicativo em foco. Os demais aplicativos não são afetados. Depois do último, todos da lista ficam mudos e o próximo toque recomeça pelo primeiro. Desligue o atalho para devolver o som aos aplicativos.</value>
   </data>
   <data name="AppHotkeys_AllApps" xml:space="preserve">
     <value>Todos os aplicativos</value>

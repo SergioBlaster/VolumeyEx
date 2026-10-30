@@ -93,8 +93,9 @@ public sealed partial class AppMuteHotkeysViewModel : HotkeyViewModel
 	public partial AudioProcessModel? SelectedSoloApp { get; set; }
 
 	private readonly AppMuteSwitcher switcher = new AppMuteSwitcher();
-	//what the OSD shows for mute all
+	//what the OSD shows for mute all, and for the round's step where all its apps are muted
 	private readonly AllAppsSession allApps;
+	private readonly AllAppsSession roundApps;
 	private readonly IDeviceProvider deviceProvider;
 	private readonly INotificationService notifications;
 	private readonly IAppShell shell;
@@ -105,7 +106,10 @@ public sealed partial class AppMuteHotkeysViewModel : HotkeyViewModel
 		this.deviceProvider = deviceProvider;
 		this.notifications = notifications;
 		this.shell = shell;
-		allApps = new AllAppsSession(() => deviceProvider.DefaultDevice?.Master, () => switcher.AllMuted, ToggleMuteAll);
+		allApps = new AllAppsSession("VolumeyEx.AllApps", "AppHotkeys_AllApps", () => deviceProvider.DefaultDevice?.Master, () => switcher.AllMuted, ToggleMuteAll);
+		//its mute button moves the round on, like the hotkey
+		roundApps = new AllAppsSession("VolumeyEx.RoundApps", "AppHotkeys_SoloApps", () => deviceProvider.DefaultDevice?.Master,
+			() => switcher.SoloAllMuted, () => SoloNext());
 		ErrorDictionary.LanguageChanged += () =>
 		{
 			SetMuteAllError(muteAllErrorType);
@@ -273,22 +277,34 @@ public sealed partial class AppMuteHotkeysViewModel : HotkeyViewModel
 				ShowAllAppsNotification();
 			}
 			else if(soloRegistered && hotkey.Equals(SoloKey))
-			{
-				var app = switcher.SoloNext(ForegroundMatcher());
-				if(app != null)
-				{
-					Logger.Info($"Only [{app.Name}] is audible");
-					if(SettingsProvider.Settings.Notifications.Enabled)
-						notifications.ShowNotification(app);
-				}
-				else
-					Logger.Info("Solo: none of the round's apps is open");
-			}
+				SoloNext();
 		}
 		catch(Exception e)
 		{
 			Logger.Error("Failed to change the apps' mute states", e);
 		}
+	}
+
+	//from the hotkey and from the OSD's mute button of the round's apps
+	private void SoloNext()
+	{
+		var app = switcher.SoloNext(ForegroundMatcher());
+		IManagedMasterAudioSession? shown = null;
+		if(app != null)
+		{
+			Logger.Info($"Only [{app.Name}] is audible");
+			shown = app;
+		}
+		else if(switcher.SoloAllMuted)
+		{
+			Logger.Info("All apps of the round are muted");
+			roundApps.Refresh();
+			shown = roundApps;
+		}
+		else
+			Logger.Info("Solo: none of the round's apps is open");
+		if(shown != null && SettingsProvider.Settings.Notifications.Enabled && deviceProvider.DefaultDevice != null)
+			notifications.ShowNotification(shown);
 	}
 
 	//from the hotkey and from the OSD's mute button

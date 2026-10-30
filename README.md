@@ -23,7 +23,7 @@
 - **Output device:** change the volume of the default device or mute it
 - **Default device:** switch to another output device with one key
 - **Mute all apps:** one key mutes every app, the next gives each its state back
-- **Switch between apps:** pick the apps; each press leaves the next one audible and mutes the other picked ones, round and round
+- **Switch between apps:** pick the apps; each press leaves the next one audible and mutes the other picked ones, then mutes all of them, round and round
 - **Media keys:** play/pause, previous, next and stop
 - **Mixer:** open the volume mixer
 - **Two modes:** keep the keys to VolumeyEx, or share them with other apps (handy in games)

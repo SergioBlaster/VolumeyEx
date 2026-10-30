@@ -649,7 +649,7 @@
     <value>Switch the sound between apps</value>
   </data>
   <data name="AppHotkeys_SoloDescription" xml:space="preserve">
-    <value>Each press leaves only the next app of the list below audible and mutes the others on the list, starting with the app in focus. Other apps aren't affected. After the last one, it starts over with the first. Turn it off to give the apps their sound back.</value>
+    <value>Each press leaves only the next app of the list below audible and mutes the others on the list, starting with the app in focus. Other apps aren't affected. After the last one, all of them are muted, and the next press starts over with the first. Turn it off to give the apps their sound back.</value>
   </data>
   <data name="AppHotkeys_AllApps" xml:space="preserve">
     <value>All apps</value>

@@ -74,7 +74,9 @@ public class AppMuteHotkeysViewModelTests : ViewModelTestBase
 		Assert.AreEqual("A", Audible());
 		PressHotkey(Solo);
 		Assert.AreEqual("B", Audible());
-		//round and round: no "all" step
+		//after the last one all apps of the round are muted, then the first again
+		PressHotkey(Solo);
+		Assert.AreEqual("", Audible());
 		PressHotkey(Solo);
 		Assert.AreEqual("A", Audible());
 	}
@@ -176,7 +178,10 @@ public class AppMuteHotkeysViewModelTests : ViewModelTestBase
 		PressHotkey(Solo);
 		PressHotkey(Solo);
 
-		CollectionAssert.AreEqual(new[] { ("100", false, 50), ("101", false, 50), ("100", false, 50) }, shown);
+		PressHotkey(Solo);
+
+		//the step where all apps of the round are muted shows the round's OSD, muted, with the device's volume
+		CollectionAssert.AreEqual(new[] { ("100", false, 50), ("101", false, 50), ("VolumeyEx.RoundApps", true, 70), ("100", false, 50) }, shown);
 	}
 
 	[TestMethod]
@@ -339,5 +344,26 @@ public class AppMuteHotkeysViewModelTests : ViewModelTestBase
 		PressHotkey(Solo);
 
 		Assert.AreEqual("A,B", Audible());
+	}
+
+	[TestMethod]
+	public void TheRoundsNotificationMuteButtonMovesTheRoundOn()
+	{
+		Settings.Notifications.Enabled = true;
+		Settings.Hotkeys.SoloPlayingApp = Solo;
+		IManagedMasterAudioSession osd = null;
+		Notifications.Setup(m => m.ShowNotification(It.IsAny<IManagedMasterAudioSession>())).Callback<IManagedMasterAudioSession>(s => osd = s);
+		Create();
+		ActivateHotkeys();
+		PressHotkey(Solo);
+		PressHotkey(Solo);
+		PressHotkey(Solo);
+		Assert.AreEqual("VolumeyEx.RoundApps", osd.Id);
+
+		var round = osd;
+		round.MuteCommand.Execute(null);
+
+		Assert.AreEqual("A", Audible());
+		Assert.IsFalse(round.IsMuted);
 	}
 }

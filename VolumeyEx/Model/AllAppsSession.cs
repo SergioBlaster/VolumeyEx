@@ -11,41 +11,47 @@ using VolumeyEx.ViewModel.Settings;
 namespace VolumeyEx.Model;
 
 /// <summary>
-/// "All apps" for the OSD of the mute all hotkey: the default device's icon and volume, muted while mute all is on.
-/// Like every OSD it's usable: the mute button turns mute all on and off, the bar changes the device's volume.
+/// A group of apps for the OSD: "All apps" (mute all) or "Apps in the round" (the solo round's step where all of them are muted).
+/// It shows the default device's icon and volume, muted while the group is muted. Like every OSD it's usable: the mute button
+/// changes the group's state, the bar changes the device's volume.
 /// </summary>
 internal sealed class AllAppsSession : IManagedMasterAudioSession
 {
+	private readonly string nameKey;
 	private readonly Func<MasterSessionModel?> getMaster;
-	private readonly Func<bool> getAllMuted;
-	private readonly Action toggleMuteAll;
+	private readonly Func<bool> getMuted;
+	private readonly Action toggle;
 
+	/// <param name="id">The OSD's own id</param>
+	/// <param name="nameKey">The resource of the name screen readers read</param>
 	/// <param name="getMaster">The default device's master session, null without a device</param>
-	/// <param name="getAllMuted">Whether mute all is on</param>
-	/// <param name="toggleMuteAll">Turns mute all on or off</param>
-	internal AllAppsSession(Func<MasterSessionModel?> getMaster, Func<bool> getAllMuted, Action toggleMuteAll)
+	/// <param name="getMuted">Whether the group is muted</param>
+	/// <param name="toggle">What the mute button does</param>
+	internal AllAppsSession(string id, string nameKey, Func<MasterSessionModel?> getMaster, Func<bool> getMuted, Action toggle)
 	{
+		Id = id;
+		this.nameKey = nameKey;
 		this.getMaster = getMaster;
-		this.getAllMuted = getAllMuted;
-		this.toggleMuteAll = toggleMuteAll;
+		this.getMuted = getMuted;
+		this.toggle = toggle;
 		MuteCommand = new ActionCommand(() => IsMuted = !IsMuted);
 	}
 
 	/// <summary>The name screen readers read for the OSD</summary>
 	public string Name
 	{
-		get => TranslationSource.Instance["AppHotkeys_AllApps"] ?? string.Empty;
+		get => TranslationSource.Instance[nameKey] ?? string.Empty;
 		set { }
 	}
 
 	public bool IsMuted
 	{
-		get => getAllMuted();
+		get => getMuted();
 		set
 		{
-			if(value != getAllMuted())
+			if(value != getMuted())
 			{
-				toggleMuteAll();
+				toggle();
 				Refresh();
 			}
 		}
@@ -72,8 +78,8 @@ internal sealed class AllAppsSession : IManagedMasterAudioSession
 
 	public ICommand MuteCommand { get; set; }
 
-	//one OSD for it, whichever device is the default
-	public string Id => "VolumeyEx.AllApps";
+	//one OSD for the group, whichever device is the default
+	public string Id { get; }
 	public uint ProcessId => 0;
 	public string FilePath => string.Empty;
 	public Guid GroupingParam => Guid.Empty;

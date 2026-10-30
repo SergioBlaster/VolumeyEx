@@ -90,9 +90,44 @@ public class AppMuteSwitcherTests
 		Assert.AreEqual("B,C,Sounds", Audible());
 		Assert.AreEqual("A", Next());
 		Assert.AreEqual("A,B,Sounds", Audible());
-		//after the last one the first again
+		//after the last one all picked apps are muted
+		Assert.IsNull(Next());
+		Assert.IsTrue(switcher.SoloAllMuted);
+		Assert.AreEqual("B,Sounds", Audible());
+		//then the first again
 		Assert.AreEqual("C", Next());
+		Assert.IsFalse(switcher.SoloAllMuted);
 		Assert.IsTrue(switcher.SoloOn);
+	}
+
+	[TestMethod]
+	public void WithOneOpenAppTheRoundSwitchesItOnAndOff()
+	{
+		App("A");
+		App("Other");
+		Pick("A", "Closed");
+
+		Assert.AreEqual("A", Next());
+		Assert.IsNull(Next());
+		Assert.AreEqual("Other", Audible());
+		Assert.AreEqual("A", Next());
+		Assert.AreEqual("A,Other", Audible());
+	}
+
+	[TestMethod]
+	public void EndingTheRoundAtTheMutedStepGivesTheStatesBack()
+	{
+		App("A");
+		App("B", muted: true);
+		Pick("A", "B");
+		Next();
+		Next();
+		Assert.IsNull(Next());
+
+		switcher.RestoreSolo();
+
+		Assert.AreEqual("A", Audible());
+		Assert.IsFalse(switcher.SoloAllMuted);
 	}
 
 	[TestMethod]
@@ -104,6 +139,7 @@ public class AppMuteSwitcherTests
 
 		Assert.AreEqual("A", Next());
 		Assert.AreEqual("B", Next());
+		Assert.IsNull(Next());
 		Assert.AreEqual("A", Next());
 	}
 
@@ -144,6 +180,7 @@ public class AppMuteSwitcherTests
 
 		Assert.AreEqual("B", Next(isB));
 		Assert.AreEqual("C", Next(isB));
+		Assert.IsNull(Next(isB));
 		//the round goes on in order: A, not the foreground app again
 		Assert.AreEqual("A", Next(isB));
 	}

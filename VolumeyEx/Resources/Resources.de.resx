@@ -590,7 +590,7 @@
     <value>Ton zwischen Apps wechseln</value>
   </data>
   <data name="AppHotkeys_SoloDescription" xml:space="preserve">
-    <value>Jeder Tastendruck lässt nur die nächste App der Liste unten hörbar und schaltet die anderen Apps der Liste stumm, beginnend mit der App im Fokus. Andere Apps sind nicht betroffen. Nach der letzten geht es mit der ersten weiter. Schalte es aus, um den Apps ihren Ton zurückzugeben.</value>
+    <value>Jeder Tastendruck lässt nur die nächste App der Liste unten hörbar und schaltet die anderen Apps der Liste stumm, beginnend mit der App im Fokus. Andere Apps sind nicht betroffen. Nach der letzten werden alle stummgeschaltet, und der nächste Tastendruck beginnt wieder mit der ersten. Schalte es aus, um den Apps ihren Ton zurückzugeben.</value>
   </data>
   <data name="AppHotkeys_AllApps" xml:space="preserve">
     <value>Alle Apps</value>

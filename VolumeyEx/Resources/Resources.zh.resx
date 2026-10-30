@@ -590,7 +590,7 @@
     <value>在应用之间切换声音</value>
   </data>
   <data name="AppHotkeys_SoloDescription" xml:space="preserve">
-    <value>每按一次，只有下方列表中的下一个应用保持有声，列表中的其他应用静音，从处于焦点的应用开始。其他应用不受影响。最后一个之后，从第一个重新开始。将其关闭即可恢复应用的声音。</value>
+    <value>每按一次，只有下方列表中的下一个应用保持有声，列表中的其他应用静音，从处于焦点的应用开始。其他应用不受影响。最后一个之后，全部静音，再按一次则从第一个重新开始。将其关闭即可恢复应用的声音。</value>
   </data>
   <data name="AppHotkeys_AllApps" xml:space="preserve">
     <value>所有应用</value>
