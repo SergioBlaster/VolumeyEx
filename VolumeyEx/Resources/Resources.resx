@@ -654,4 +654,28 @@
   <data name="AppHotkeys_AllApps" xml:space="preserve">
     <value />
   </data>
+  <data name="AppHotkeys_SoloApps" xml:space="preserve">
+    <value />
+  </data>
+  <data name="AppHotkeys_SoloNoApps" xml:space="preserve">
+    <value />
+  </data>
+  <data name="AppHotkeys_SoloAppHint" xml:space="preserve">
+    <value />
+  </data>
+  <data name="AppHotkeys_SoloNoOpenApps" xml:space="preserve">
+    <value />
+  </data>
+  <data name="AppHotkeys_MoveUp" xml:space="preserve">
+    <value />
+  </data>
+  <data name="AppHotkeys_MoveDown" xml:space="preserve">
+    <value />
+  </data>
+  <data name="AppHotkeys_MoveUpApp" xml:space="preserve">
+    <value />
+  </data>
+  <data name="AppHotkeys_MoveDownApp" xml:space="preserve">
+    <value />
+  </data>
 </root>

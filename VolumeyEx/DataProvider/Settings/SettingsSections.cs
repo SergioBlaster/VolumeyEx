@@ -59,6 +59,8 @@ public sealed class HotkeySettings : SettingsSection
 	public HotKey? MuteAllApps { get; set; }
 	/// <summary>Leaves the next playing app the only audible one, round by round (see <see cref="Model.AppMuteSwitcher"/>)</summary>
 	public HotKey? SoloPlayingApp { get; set; }
+	/// <summary>The apps of the solo round, by name (as the mixer shows it), in the order the round goes through them</summary>
+	public IReadOnlyList<string> SoloApps { get; set; } = Array.Empty<string>();
 	public bool PreventResettingVolumeBalance { get; set; }
 	/// <summary>
 	/// True: hotkeys are registered with Windows and other apps don't get the keys (RegisterHotKey).

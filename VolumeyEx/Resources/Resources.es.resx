@@ -587,12 +587,36 @@
     <value>Vuelve a pulsar para devolver a cada aplicación el estado que tenía antes. Las aplicaciones que se inicien mientras tanto también se silencian.</value>
   </data>
   <data name="AppHotkeys_Solo" xml:space="preserve">
-    <value>Solo una aplicación sonando a la vez</value>
+    <value>Alternar el sonido entre aplicaciones</value>
   </data>
   <data name="AppHotkeys_SoloDescription" xml:space="preserve">
-    <value>Cada pulsación deja con sonido la siguiente aplicación que está sonando y silencia las demás, empezando por la que tiene el foco. Después de la última, vuelve a empezar por la primera. Desactívalo para que todas vuelvan a sonar.</value>
+    <value>Cada pulsación deja con sonido solo la siguiente aplicación de la lista de abajo y silencia las demás de la lista, empezando por la que tiene el foco. Las demás aplicaciones no se ven afectadas. Después de la última, vuelve a empezar por la primera. Desactívalo para devolver el sonido a las aplicaciones.</value>
   </data>
   <data name="AppHotkeys_AllApps" xml:space="preserve">
     <value>Todas las aplicaciones</value>
+  </data>
+  <data name="AppHotkeys_SoloApps" xml:space="preserve">
+    <value>Aplicaciones del ciclo</value>
+  </data>
+  <data name="AppHotkeys_SoloNoApps" xml:space="preserve">
+    <value>Todavía no hay aplicaciones. Agrega las aplicaciones entre las que alterna el ciclo, en el orden que quieras.</value>
+  </data>
+  <data name="AppHotkeys_SoloAppHint" xml:space="preserve">
+    <value>Aplicaciones abiertas en el dispositivo predeterminado</value>
+  </data>
+  <data name="AppHotkeys_SoloNoOpenApps" xml:space="preserve">
+    <value>No hay ninguna otra aplicación abierta en el dispositivo predeterminado.</value>
+  </data>
+  <data name="AppHotkeys_MoveUp" xml:space="preserve">
+    <value>Subir</value>
+  </data>
+  <data name="AppHotkeys_MoveDown" xml:space="preserve">
+    <value>Bajar</value>
+  </data>
+  <data name="AppHotkeys_MoveUpApp" xml:space="preserve">
+    <value>Subir {0}</value>
+  </data>
+  <data name="AppHotkeys_MoveDownApp" xml:space="preserve">
+    <value>Bajar {0}</value>
   </data>
 </root>

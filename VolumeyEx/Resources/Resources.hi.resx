@@ -587,12 +587,36 @@
     <value>हर ऐप को उसकी पहले वाली स्थिति वापस देने के लिए फिर से दबाएँ। इस बीच शुरू होने वाले ऐप्स भी म्यूट हो जाते हैं।</value>
   </data>
   <data name="AppHotkeys_Solo" xml:space="preserve">
-    <value>एक बार में केवल एक बजता हुआ ऐप</value>
+    <value>ऐप्स के बीच आवाज़ बदलें</value>
   </data>
   <data name="AppHotkeys_SoloDescription" xml:space="preserve">
-    <value>हर बार दबाने पर अगला बजता हुआ ऐप सुनाई देता है और बाकी म्यूट हो जाते हैं, फ़ोकस वाले ऐप से शुरू करके। आख़िरी के बाद फिर से पहले से शुरू होता है। सभी को फिर से सुनने के लिए इसे बंद करें।</value>
+    <value>हर बार दबाने पर नीचे दी गई सूची का केवल अगला ऐप सुनाई देता है और सूची के बाकी ऐप म्यूट हो जाते हैं, फ़ोकस वाले ऐप से शुरू करके। अन्य ऐप्स पर कोई असर नहीं होता। आख़िरी के बाद फिर से पहले से शुरू होता है। ऐप्स की आवाज़ वापस लाने के लिए इसे बंद करें।</value>
   </data>
   <data name="AppHotkeys_AllApps" xml:space="preserve">
     <value>सभी ऐप्स</value>
+  </data>
+  <data name="AppHotkeys_SoloApps" xml:space="preserve">
+    <value>चक्र के ऐप्स</value>
+  </data>
+  <data name="AppHotkeys_SoloNoApps" xml:space="preserve">
+    <value>अभी कोई ऐप नहीं। वे ऐप्स जोड़ें जिनके बीच चक्र बदलता है, अपने चाहे क्रम में।</value>
+  </data>
+  <data name="AppHotkeys_SoloAppHint" xml:space="preserve">
+    <value>डिफ़ॉल्ट डिवाइस पर खुले ऐप्स</value>
+  </data>
+  <data name="AppHotkeys_SoloNoOpenApps" xml:space="preserve">
+    <value>डिफ़ॉल्ट डिवाइस पर कोई अन्य ऐप खुला नहीं है।</value>
+  </data>
+  <data name="AppHotkeys_MoveUp" xml:space="preserve">
+    <value>ऊपर ले जाएँ</value>
+  </data>
+  <data name="AppHotkeys_MoveDown" xml:space="preserve">
+    <value>नीचे ले जाएँ</value>
+  </data>
+  <data name="AppHotkeys_MoveUpApp" xml:space="preserve">
+    <value>{0} को ऊपर ले जाएँ</value>
+  </data>
+  <data name="AppHotkeys_MoveDownApp" xml:space="preserve">
+    <value>{0} को नीचे ले जाएँ</value>
   </data>
 </root>

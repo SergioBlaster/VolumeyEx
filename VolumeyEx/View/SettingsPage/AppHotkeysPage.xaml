@@ -144,20 +144,97 @@
                                              AutomationProperties.AutomationId="SoloToggle" />
                         </Grid>
                     </ui:CardExpander.Header>
-                    <Grid Margin="40 0 0 0">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="*" />
-                            <ColumnDefinition Width="Auto" />
-                        </Grid.ColumnDefinitions>
-                        <TextBlock Text="{lc:Localization AppHotkeys_SoloDescription}" Style="{StaticResource Caption}" TextWrapping="Wrap"
-                                   VerticalAlignment="Center" Margin="0 0 16 0" />
-                        <controls:HotKeyBox Grid.Column="1"
-                                            HotKey="{Binding SoloKey}"
-                                            IsEnabled="{Binding SoloRegistered, Converter={StaticResource NotRegisteredToEnabled}}"
-                                            VerticalAlignment="Center"
-                                            AutomationProperties.Name="{lc:Localization AppHotkeys_Solo}"
-                                            AutomationProperties.AutomationId="SoloBox" />
-                    </Grid>
+                    <StackPanel Margin="40 0 0 0">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="Auto" />
+                            </Grid.ColumnDefinitions>
+                            <TextBlock Text="{lc:Localization AppHotkeys_SoloDescription}" Style="{StaticResource Caption}" TextWrapping="Wrap"
+                                       VerticalAlignment="Center" Margin="0 0 16 0" />
+                            <controls:HotKeyBox Grid.Column="1"
+                                                HotKey="{Binding SoloKey}"
+                                                IsEnabled="{Binding SoloRegistered, Converter={StaticResource NotRegisteredToEnabled}}"
+                                                VerticalAlignment="Center"
+                                                AutomationProperties.Name="{lc:Localization AppHotkeys_Solo}"
+                                                AutomationProperties.AutomationId="SoloBox" />
+                        </Grid>
+                        <!-- the round's apps, in its order: added from the open apps, moved up and down, removed -->
+                        <Grid Margin="0 16 0 8">
+                            <TextBlock Text="{lc:Localization AppHotkeys_SoloApps}" FontWeight="SemiBold" VerticalAlignment="Center" />
+                            <ui:Button HorizontalAlignment="Right"
+                                       Icon="{ui:SymbolIcon Add24}"
+                                       Content="{lc:Localization AppHotkeys_AddApp}"
+                                       Click="OnAddSoloAppClick"
+                                       AutomationProperties.AutomationId="AddSoloAppButton" />
+                        </Grid>
+                        <TextBlock Text="{lc:Localization AppHotkeys_SoloNoApps}" TextWrapping="Wrap">
+                            <TextBlock.Style>
+                                <Style TargetType="TextBlock" BasedOn="{StaticResource Caption}">
+                                    <Setter Property="Visibility" Value="Collapsed" />
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding SoloApps.Count}" Value="0">
+                                            <Setter Property="Visibility" Value="Visible" />
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </TextBlock.Style>
+                        </TextBlock>
+                        <ItemsControl ItemsSource="{Binding SoloApps}" Focusable="False" AutomationProperties.AutomationId="SoloAppList">
+                            <ItemsControl.ItemContainerStyle>
+                                <Style TargetType="ContentPresenter">
+                                    <Setter Property="AutomationProperties.Name" Value="{Binding Name}" />
+                                </Style>
+                            </ItemsControl.ItemContainerStyle>
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate>
+                                    <Grid Margin="0 2">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="Auto" />
+                                            <ColumnDefinition Width="*" />
+                                            <ColumnDefinition Width="Auto" />
+                                            <ColumnDefinition Width="Auto" />
+                                            <ColumnDefinition Width="Auto" />
+                                        </Grid.ColumnDefinitions>
+                                        <Image Source="{Binding IconSource}" Width="20" Height="20" Margin="0 0 12 0" VerticalAlignment="Center"
+                                               RenderOptions.BitmapScalingMode="HighQuality" />
+                                        <TextBlock Grid.Column="1" Text="{Binding Name}" VerticalAlignment="Center"
+                                                   TextTrimming="CharacterEllipsis" TextWrapping="NoWrap" />
+                                        <ui:Button Grid.Column="2" Appearance="Transparent" Padding="8 6" Margin="4 0 0 0"
+                                                   Icon="{ui:SymbolIcon ArrowUp24}" Command="{Binding MoveUpCommand}"
+                                                   ToolTip="{lc:Localization AppHotkeys_MoveUp}">
+                                            <AutomationProperties.Name>
+                                                <MultiBinding Converter="{StaticResource LocalizedFormat}" ConverterParameter="AppHotkeys_MoveUpApp">
+                                                    <Binding Path="Name" />
+                                                    <Binding Source="{x:Static lc:TranslationSource.Instance}" Path="CurrentCulture" />
+                                                </MultiBinding>
+                                            </AutomationProperties.Name>
+                                        </ui:Button>
+                                        <ui:Button Grid.Column="3" Appearance="Transparent" Padding="8 6" Margin="4 0 0 0"
+                                                   Icon="{ui:SymbolIcon ArrowDown24}" Command="{Binding MoveDownCommand}"
+                                                   ToolTip="{lc:Localization AppHotkeys_MoveDown}">
+                                            <AutomationProperties.Name>
+                                                <MultiBinding Converter="{StaticResource LocalizedFormat}" ConverterParameter="AppHotkeys_MoveDownApp">
+                                                    <Binding Path="Name" />
+                                                    <Binding Source="{x:Static lc:TranslationSource.Instance}" Path="CurrentCulture" />
+                                                </MultiBinding>
+                                            </AutomationProperties.Name>
+                                        </ui:Button>
+                                        <ui:Button Grid.Column="4" Appearance="Transparent" Padding="8 6" Margin="4 0 0 0"
+                                                   Icon="{ui:SymbolIcon Delete24}" Command="{Binding RemoveCommand}"
+                                                   ToolTip="{lc:Localization AppHotkeys_Remove}">
+                                            <AutomationProperties.Name>
+                                                <MultiBinding Converter="{StaticResource LocalizedFormat}" ConverterParameter="AppHotkeys_RemoveApp">
+                                                    <Binding Path="Name" />
+                                                    <Binding Source="{x:Static lc:TranslationSource.Instance}" Path="CurrentCulture" />
+                                                </MultiBinding>
+                                            </AutomationProperties.Name>
+                                        </ui:Button>
+                                    </Grid>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+                    </StackPanel>
                 </ui:CardExpander>
             </StackPanel>
 

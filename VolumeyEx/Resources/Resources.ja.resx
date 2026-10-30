@@ -587,12 +587,36 @@
     <value>もう一度押すと、各アプリが以前の状態に戻ります。その間に起動したアプリもミュートされます。</value>
   </data>
   <data name="AppHotkeys_Solo" xml:space="preserve">
-    <value>再生中のアプリを 1 つだけにする</value>
+    <value>アプリ間でサウンドを切り替え</value>
   </data>
   <data name="AppHotkeys_SoloDescription" xml:space="preserve">
-    <value>押すたびに、再生中の次のアプリだけが聞こえ、ほかはミュートされます。最初はフォーカスがあるアプリから始まります。最後のアプリの後は、最初のアプリに戻ります。すべてを再び聞くにはオフにします。</value>
+    <value>押すたびに、下のリストの次のアプリだけが聞こえ、リストのほかのアプリはミュートされます。最初はフォーカスがあるアプリから始まります。リストにないアプリには影響しません。最後のアプリの後は、最初のアプリに戻ります。アプリのサウンドを元に戻すにはオフにします。</value>
   </data>
   <data name="AppHotkeys_AllApps" xml:space="preserve">
     <value>すべてのアプリ</value>
+  </data>
+  <data name="AppHotkeys_SoloApps" xml:space="preserve">
+    <value>切り替えるアプリ</value>
+  </data>
+  <data name="AppHotkeys_SoloNoApps" xml:space="preserve">
+    <value>まだアプリがありません。切り替えるアプリを好きな順番で追加します。</value>
+  </data>
+  <data name="AppHotkeys_SoloAppHint" xml:space="preserve">
+    <value>既定のデバイスで開いているアプリ</value>
+  </data>
+  <data name="AppHotkeys_SoloNoOpenApps" xml:space="preserve">
+    <value>既定のデバイスで開いているほかのアプリはありません。</value>
+  </data>
+  <data name="AppHotkeys_MoveUp" xml:space="preserve">
+    <value>上へ移動</value>
+  </data>
+  <data name="AppHotkeys_MoveDown" xml:space="preserve">
+    <value>下へ移動</value>
+  </data>
+  <data name="AppHotkeys_MoveUpApp" xml:space="preserve">
+    <value>{0} を上へ移動</value>
+  </data>
+  <data name="AppHotkeys_MoveDownApp" xml:space="preserve">
+    <value>{0} を下へ移動</value>
   </data>
 </root>

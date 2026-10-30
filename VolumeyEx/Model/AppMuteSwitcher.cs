@@ -8,13 +8,14 @@ using System.Linq;
 namespace VolumeyEx.Model;
 
 /// <summary>
-/// The "mute all apps" and "only one playing app at a time" hotkeys on one device's apps.
+/// The "mute all apps" and "one app of the round at a time" hotkeys on one device's apps.
 /// <para>
-/// Solo leaves one of the apps that are playing audible and mutes the other playing ones; each press moves on to the next playing app
-/// in the mixer's order, round and round (A, B, C, A...). The first press starts with the foreground app when it's playing.
-/// System Sounds isn't part of the round, and an app that starts playing during it stays audible until the next press.
-/// The apps get their states back when the round is ended (<see cref="RestoreSolo"/>: the hotkey is turned off, the default device
-/// changes, VolumeyEx exits).
+/// Solo works on the apps the user picked (<see cref="SetSoloApps"/>, by name) and leaves every other app alone: each press leaves the next
+/// picked app audible and mutes the other picked ones, in the order of the user's list, round and round (A, B, C, A...). Picked apps that
+/// aren't open are skipped; an open one takes part also while it's silent. The apps of one name (e.g. several processes of a browser) go
+/// together. The first press starts with the foreground app when it's picked. An app that opens during the round stays as it is until the
+/// next press. The apps get their states back when the round is ended (<see cref="RestoreSolo"/>: the hotkey is turned off, the default
+/// device changes, VolumeyEx exits), and an app that's taken off the list gets its state back right away.
 /// </para>
 /// <para>
 /// Mute all mutes every app, also the ones that start while it's on; pressed again it gives each app back the state it had right before,
@@ -35,11 +36,14 @@ internal sealed class AppMuteSwitcher
 	//apps that exited while muted here, by executable and name: the state they get back when they start again
 	private readonly Dictionary<string, bool> exitedApps = new(StringComparer.OrdinalIgnoreCase);
 
+	//the apps of the solo round, by name, in the user's order
+	private IReadOnlyList<string> soloApps = Array.Empty<string>();
+
 	private bool allMuted;
 	private bool soloOn;
 
-	//the audible app of the solo round; null while the round is on: it stopped playing or exited
-	private AudioProcessModel? soloApp;
+	//the name of the round's audible app
+	private string? soloName;
 
 	private ObservableCollection<AudioProcessModel>? apps;
 
@@ -49,8 +53,8 @@ internal sealed class AppMuteSwitcher
 	/// <summary>The solo round is on</summary>
 	internal bool SoloOn => soloOn;
 
-	/// <summary>The audible app of the solo round, null when it isn't on</summary>
-	internal AudioProcessModel? SoloApp => soloOn ? soloApp : null;
+	/// <summary>The name of the round's audible app, null when the round isn't on</summary>
+	internal string? SoloName => soloOn ? soloName : null;
 
 	/// <summary>
 	/// Works on these apps from now on (the default device's); the apps of the previous device get their states back first
@@ -75,6 +79,21 @@ internal sealed class AppMuteSwitcher
 	}
 
 	/// <summary>
+	/// The apps of the solo round, by name, in the order the round goes through them. An app taken off the list during the round
+	/// gets its state back
+	/// </summary>
+	internal void SetSoloApps(IReadOnlyList<string> names)
+	{
+		soloApps = names.ToList();
+		var picked = new HashSet<string>(soloApps, StringComparer.Ordinal);
+		foreach(var app in soloStates.Keys.Where(app => !picked.Contains(app.Name)).ToList())
+		{
+			RestoreSoloState(app, soloStates[app]);
+			soloStates.Remove(app);
+		}
+	}
+
+	/// <summary>
 	/// Mutes every app, or gives each the state it had right before when mute all is on
 	/// </summary>
 	/// <returns>True if the apps are muted now</returns>
@@ -94,39 +113,49 @@ internal sealed class AppMuteSwitcher
 	}
 
 	/// <summary>
-	/// Makes the next playing app the only audible one: after the last one, the first again
+	/// Makes the next picked app the only audible one of the picked apps: after the last one, the first again
 	/// </summary>
 	/// <param name="isForeground">Whether an app is the foreground app (where the first press starts)</param>
-	/// <returns>The audible app, null if none is playing (nothing changes then)</returns>
+	/// <returns>One of the audible app's models (for its OSD), null if none of the picked apps is open (nothing changes then)</returns>
 	internal AudioProcessModel? SoloNext(Func<AudioProcessModel, bool> isForeground)
 	{
 		if(apps == null)
 			return null;
+		//the picked apps that are open, in the user's order, each with its models
+		var round = soloApps
+			.Select(name => (name, models: apps.Where(app => app.Name == name).ToList()))
+			.Where(entry => entry.models.Count > 0)
+			.ToList();
+		if(round.Count == 0)
+			return null;
 		//a solo press means "let me hear one": mute all ends first
 		RestoreMuteAll();
-		var playing = apps.Where(app => !app.IsSystemSounds && app.IsPlaying).ToList();
 
-		if(playing.Count == 0)
-			return null;
-
-		AudioProcessModel next;
+		int next;
 		if(soloOn)
 		{
-			//after the last app the first again; when the audible app stopped playing or exited (-1), also the first
-			int current = soloApp == null ? -1 : playing.IndexOf(soloApp);
-			next = playing[(current + 1) % playing.Count];
+			//after the last app the first again; when the audible app was closed or taken off the list (-1), also the first
+			int current = round.FindIndex(entry => entry.name == soloName);
+			next = (current + 1) % round.Count;
 		}
 		else
-			next = playing.FirstOrDefault(isForeground) ?? playing[0];
-
-		foreach(var app in playing)
 		{
-			soloStates.TryAdd(app, app.IsMuted);
-			app.IsMuted = !ReferenceEquals(app, next);
+			next = round.FindIndex(entry => entry.models.Any(isForeground));
+			if(next < 0)
+				next = 0;
+		}
+
+		for(int i = 0; i < round.Count; i++)
+		{
+			foreach(var app in round[i].models)
+			{
+				soloStates.TryAdd(app, app.IsMuted);
+				app.IsMuted = i != next;
+			}
 		}
 		soloOn = true;
-		soloApp = next;
-		return next;
+		soloName = round[next].name;
+		return round[next].models[0];
 	}
 
 	/// <summary>Gives every app the state it had before mute all and the solo round</summary>
@@ -155,15 +184,18 @@ internal sealed class AppMuteSwitcher
 	internal void RestoreSolo()
 	{
 		foreach(var (app, wasMuted) in soloStates)
-		{
-			if(allMuted && muteAllStates.ContainsKey(app))
-				muteAllStates[app] = wasMuted;
-			else if(IsShown(app))
-				app.IsMuted = wasMuted;
-		}
+			RestoreSoloState(app, wasMuted);
 		soloStates.Clear();
 		soloOn = false;
-		soloApp = null;
+		soloName = null;
+	}
+
+	private void RestoreSoloState(AudioProcessModel app, bool wasMuted)
+	{
+		if(allMuted && muteAllStates.ContainsKey(app))
+			muteAllStates[app] = wasMuted;
+		else if(IsShown(app))
+			app.IsMuted = wasMuted;
 	}
 
 	private bool IsShown(AudioProcessModel app) => apps != null && apps.Contains(app);
@@ -201,8 +233,6 @@ internal sealed class AppMuteSwitcher
 			if(app.IsMuted != original)
 				exitedApps[KeyOf(app)] = original;
 		}
-		if(ReferenceEquals(soloApp, app))
-			soloApp = null;
 	}
 
 	private void OnAppAdded(AudioProcessModel app)

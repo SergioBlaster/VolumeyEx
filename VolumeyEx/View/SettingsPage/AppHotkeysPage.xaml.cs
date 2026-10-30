@@ -27,4 +27,12 @@ public sealed partial class AppHotkeysPage
 		vm.AppHotkeys.PrepareAddApp();
 		new AddAppDialog(vm.AppHotkeys) { DialogHostEx = window.DialogHost }.ShowAsync().Forget(Logger, "Failed to show the add app dialog");
 	}
+
+	private void OnAddSoloAppClick(object sender, RoutedEventArgs e)
+	{
+		if(Window.GetWindow(this) is not SettingsWindow window)
+			return;
+		vm.AppMute.PrepareAddSoloApp();
+		new AddSoloAppDialog(vm.AppMute) { DialogHostEx = window.DialogHost }.ShowAsync().Forget(Logger, "Failed to show the add solo app dialog");
+	}
 }

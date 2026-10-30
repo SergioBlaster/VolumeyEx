@@ -587,12 +587,36 @@
     <value>Premi di nuovo per restituire a ogni app lo stato che aveva prima. Anche le app che si avviano nel frattempo vengono disattivate.</value>
   </data>
   <data name="AppHotkeys_Solo" xml:space="preserve">
-    <value>Una sola app in riproduzione alla volta</value>
+    <value>Alterna l'audio tra le app</value>
   </data>
   <data name="AppHotkeys_SoloDescription" xml:space="preserve">
-    <value>Ogni pressione lascia udibile la prossima app in riproduzione e disattiva le altre, a partire dall'app attiva. Dopo l'ultima, si ricomincia dalla prima. Disattivalo per sentirle di nuovo tutte.</value>
+    <value>Ogni pressione lascia udibile solo la prossima app dell'elenco qui sotto e disattiva le altre dell'elenco, a partire dall'app attiva. Le altre app non vengono toccate. Dopo l'ultima, si ricomincia dalla prima. Disattivalo per restituire l'audio alle app.</value>
   </data>
   <data name="AppHotkeys_AllApps" xml:space="preserve">
     <value>Tutte le app</value>
+  </data>
+  <data name="AppHotkeys_SoloApps" xml:space="preserve">
+    <value>App del ciclo</value>
+  </data>
+  <data name="AppHotkeys_SoloNoApps" xml:space="preserve">
+    <value>Ancora nessuna app. Aggiungi le app tra cui il ciclo alterna, nell'ordine che preferisci.</value>
+  </data>
+  <data name="AppHotkeys_SoloAppHint" xml:space="preserve">
+    <value>App aperte sul dispositivo predefinito</value>
+  </data>
+  <data name="AppHotkeys_SoloNoOpenApps" xml:space="preserve">
+    <value>Nessun'altra app è aperta sul dispositivo predefinito.</value>
+  </data>
+  <data name="AppHotkeys_MoveUp" xml:space="preserve">
+    <value>Sposta su</value>
+  </data>
+  <data name="AppHotkeys_MoveDown" xml:space="preserve">
+    <value>Sposta giù</value>
+  </data>
+  <data name="AppHotkeys_MoveUpApp" xml:space="preserve">
+    <value>Sposta su {0}</value>
+  </data>
+  <data name="AppHotkeys_MoveDownApp" xml:space="preserve">
+    <value>Sposta giù {0}</value>
   </data>
 </root>

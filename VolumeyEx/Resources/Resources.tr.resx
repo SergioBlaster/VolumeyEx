@@ -587,12 +587,36 @@
     <value>Her uygulamaya önceki durumunu geri vermek için yeniden basın. Bu sırada başlayan uygulamaların da sesi kapatılır.</value>
   </data>
   <data name="AppHotkeys_Solo" xml:space="preserve">
-    <value>Aynı anda yalnızca bir çalan uygulama</value>
+    <value>Sesi uygulamalar arasında değiştir</value>
   </data>
   <data name="AppHotkeys_SoloDescription" xml:space="preserve">
-    <value>Her basış, ses çalan bir sonraki uygulamayı duyulur bırakır ve diğerlerinin sesini kapatır; odaktaki uygulamadan başlar. Sonuncudan sonra yeniden ilkinden başlar. Hepsini yeniden duymak için kapatın.</value>
+    <value>Her basış, aşağıdaki listede yalnızca bir sonraki uygulamayı duyulur bırakır ve listedeki diğerlerinin sesini kapatır; odaktaki uygulamadan başlar. Diğer uygulamalar etkilenmez. Sonuncudan sonra yeniden ilkinden başlar. Uygulamalara seslerini geri vermek için kapatın.</value>
   </data>
   <data name="AppHotkeys_AllApps" xml:space="preserve">
     <value>Tüm uygulamalar</value>
+  </data>
+  <data name="AppHotkeys_SoloApps" xml:space="preserve">
+    <value>Döngüdeki uygulamalar</value>
+  </data>
+  <data name="AppHotkeys_SoloNoApps" xml:space="preserve">
+    <value>Henüz uygulama yok. Döngünün arasında geçiş yapacağı uygulamaları istediğiniz sırayla ekleyin.</value>
+  </data>
+  <data name="AppHotkeys_SoloAppHint" xml:space="preserve">
+    <value>Varsayılan cihazda açık uygulamalar</value>
+  </data>
+  <data name="AppHotkeys_SoloNoOpenApps" xml:space="preserve">
+    <value>Varsayılan cihazda açık başka uygulama yok.</value>
+  </data>
+  <data name="AppHotkeys_MoveUp" xml:space="preserve">
+    <value>Yukarı taşı</value>
+  </data>
+  <data name="AppHotkeys_MoveDown" xml:space="preserve">
+    <value>Aşağı taşı</value>
+  </data>
+  <data name="AppHotkeys_MoveUpApp" xml:space="preserve">
+    <value>{0} öğesini yukarı taşı</value>
+  </data>
+  <data name="AppHotkeys_MoveDownApp" xml:space="preserve">
+    <value>{0} öğesini aşağı taşı</value>
   </data>
 </root>

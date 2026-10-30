@@ -1,6 +1,11 @@
 #nullable enable
 using System;
+using System.Collections.ObjectModel;
+using System.Linq;
+using System.Windows.Input;
+using System.Windows.Media;
 using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
 using VolumeyEx.Controls;
 using VolumeyEx.DataProvider;
 using VolumeyEx.Helper;
@@ -10,9 +15,9 @@ using VolumeyEx.Services;
 namespace VolumeyEx.ViewModel.Settings;
 
 /// <summary>
-/// The "mute all apps" and "only one playing app" hotkeys of the default device (see <see cref="AppMuteSwitcher"/>).
-/// Each is turned on and off on its own; the apps get their states back when the hotkey that changed them is turned off,
-/// when the default device changes and when VolumeyEx exits.
+/// The "mute all apps" and "one app of the round at a time" hotkeys of the default device (see <see cref="AppMuteSwitcher"/>),
+/// and the list of the round's apps. Each hotkey is turned on and off on its own; the apps get their states back when the hotkey
+/// that changed them is turned off, when the default device changes and when VolumeyEx exits.
 /// </summary>
 public sealed partial class AppMuteHotkeysViewModel : HotkeyViewModel
 {
@@ -77,6 +82,16 @@ public sealed partial class AppMuteHotkeysViewModel : HotkeyViewModel
 		}
 	}
 
+	/// <summary>The apps of the solo round, in the order it goes through them</summary>
+	public ObservableCollection<SoloAppItem> SoloApps { get; } = new ObservableCollection<SoloAppItem>();
+
+	/// <summary>The open apps the "Add app" dialog offers: the default device's apps that aren't in the round (see <see cref="PrepareAddSoloApp"/>)</summary>
+	public ObservableCollection<AudioProcessModel> AddableSoloApps { get; } = new ObservableCollection<AudioProcessModel>();
+
+	/// <summary>The app picked in the "Add app" dialog</summary>
+	[ObservableProperty]
+	public partial AudioProcessModel? SelectedSoloApp { get; set; }
+
 	private readonly AppMuteSwitcher switcher = new AppMuteSwitcher();
 	//what the OSD shows for mute all
 	private readonly AllAppsSession allApps;
@@ -105,6 +120,9 @@ public sealed partial class AppMuteHotkeysViewModel : HotkeyViewModel
 		shell.SessionEnding += switcher.Detach;
 
 		var settings = SettingsProvider.Settings.Hotkeys;
+		foreach(string name in settings.SoloApps.Distinct())
+			SoloApps.Add(CreateItem(name));
+		switcher.SetSoloApps(SoloApps.Select(app => app.Name).ToList());
 		if(settings.MuteAllApps is HotKey muteAll)
 		{
 			MuteAllKey = muteAll;
@@ -164,7 +182,85 @@ public sealed partial class AppMuteHotkeysViewModel : HotkeyViewModel
 
 	//may be raised off the UI thread; the device's app list is used on the UI thread
 	private void OnDefaultDeviceChanged(OutputDeviceModel? newDevice)
-		=> shell.Dispatcher.Invoke(() => switcher.Attach(newDevice?.Processes));
+		=> shell.Dispatcher.Invoke(() =>
+		{
+			switcher.Attach(newDevice?.Processes);
+			RefreshIcons();
+		});
+
+	/// <summary>Fills the "Add app" dialog's list: the default device's open apps that aren't in the round, one per name</summary>
+	internal void PrepareAddSoloApp()
+	{
+		SelectedSoloApp = null;
+		AddableSoloApps.Clear();
+		foreach(var app in deviceProvider.DefaultDevice?.Processes.ToList() ?? new())
+		{
+			if(SoloApps.All(item => item.Name != app.Name) && AddableSoloApps.All(added => added.Name != app.Name))
+				AddableSoloApps.Add(app);
+		}
+		RefreshIcons();
+	}
+
+	/// <summary>Adds the app picked in the "Add app" dialog at the end of the round</summary>
+	/// <returns>False if no app is picked</returns>
+	internal bool AddSoloApp()
+	{
+		if(SelectedSoloApp is not { } app || SoloApps.Any(item => item.Name == app.Name))
+			return false;
+		SoloApps.Add(CreateItem(app.Name, app.IconSource));
+		SaveSoloApps();
+		return true;
+	}
+
+	private void RemoveSoloApp(SoloAppItem item)
+	{
+		if(SoloApps.Remove(item))
+			SaveSoloApps();
+	}
+
+	/// <param name="offset">-1: up (earlier in the round), 1: down</param>
+	private void MoveSoloApp(SoloAppItem item, int offset)
+	{
+		int from = SoloApps.IndexOf(item);
+		int to = from + offset;
+		if(from < 0 || to < 0 || to >= SoloApps.Count)
+			return;
+		SoloApps.Move(from, to);
+		SaveSoloApps();
+	}
+
+	private bool CanMove(SoloAppItem item, int offset)
+	{
+		int to = SoloApps.IndexOf(item) + offset;
+		return to >= 0 && to < SoloApps.Count;
+	}
+
+	private void SaveSoloApps()
+	{
+		var names = SoloApps.Select(item => item.Name).ToList();
+		//a list is saved only when it's replaced
+		SettingsProvider.Settings.Hotkeys.SoloApps = names;
+		switcher.SetSoloApps(names);
+		foreach(var item in SoloApps)
+			item.RefreshCommands();
+		Logger.Info($"Solo apps: [{string.Join("], [", names)}]");
+	}
+
+	private SoloAppItem CreateItem(string name, ImageSource? icon = null)
+		=> new SoloAppItem(name, icon ?? IconOf(name), RemoveSoloApp, MoveSoloApp, CanMove);
+
+	//the icon of an open app of that name, else none (the app isn't open: it gets its icon when it is)
+	private ImageSource? IconOf(string name)
+		=> deviceProvider.DefaultDevice?.Processes.ToList().FirstOrDefault(app => app.Name == name)?.IconSource;
+
+	private void RefreshIcons()
+	{
+		foreach(var item in SoloApps)
+		{
+			if(item.IconSource == null)
+				item.IconSource = IconOf(item.Name);
+		}
+	}
 
 	//on the UI thread
 	private void OnHotkeyPressed(HotKey hotkey)
@@ -186,7 +282,7 @@ public sealed partial class AppMuteHotkeysViewModel : HotkeyViewModel
 						notifications.ShowNotification(app);
 				}
 				else
-					Logger.Info("Solo: no app is playing");
+					Logger.Info("Solo: none of the round's apps is open");
 			}
 		}
 		catch(Exception e)
@@ -234,5 +330,37 @@ public sealed partial class AppMuteHotkeysViewModel : HotkeyViewModel
 			}
 			return path != null && string.Equals(app.FilePath, path, StringComparison.OrdinalIgnoreCase);
 		};
+	}
+}
+
+/// <summary>
+/// An app of the solo round in the settings list, with its buttons: up, down and remove
+/// </summary>
+public sealed partial class SoloAppItem : ObservableObject
+{
+	public string Name { get; }
+
+	/// <summary>The icon of the open app, null while it isn't open</summary>
+	[ObservableProperty]
+	public partial ImageSource? IconSource { get; set; }
+
+	public IRelayCommand MoveUpCommand { get; }
+	public IRelayCommand MoveDownCommand { get; }
+	public ICommand RemoveCommand { get; }
+
+	internal SoloAppItem(string name, ImageSource? icon, Action<SoloAppItem> remove, Action<SoloAppItem, int> move, Func<SoloAppItem, int, bool> canMove)
+	{
+		Name = name;
+		IconSource = icon;
+		MoveUpCommand = new RelayCommand(() => move(this, -1), () => canMove(this, -1));
+		MoveDownCommand = new RelayCommand(() => move(this, 1), () => canMove(this, 1));
+		RemoveCommand = new RelayCommand(() => remove(this));
+	}
+
+	/// <summary>The first app can't move up, the last one can't move down</summary>
+	internal void RefreshCommands()
+	{
+		MoveUpCommand.NotifyCanExecuteChanged();
+		MoveDownCommand.NotifyCanExecuteChanged();
 	}
 }

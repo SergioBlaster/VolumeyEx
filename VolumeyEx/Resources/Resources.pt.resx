@@ -587,12 +587,36 @@
     <value>Pressione de novo para devolver a cada aplicativo o estado que ele tinha antes. Aplicativos que começarem a tocar nesse meio-tempo também ficam mudos.</value>
   </data>
   <data name="AppHotkeys_Solo" xml:space="preserve">
-    <value>Só um aplicativo tocando por vez</value>
+    <value>Alternar o som entre aplicativos</value>
   </data>
   <data name="AppHotkeys_SoloDescription" xml:space="preserve">
-    <value>A cada toque, o próximo aplicativo que está tocando fica com som e os outros ficam mudos, começando pelo aplicativo em foco. Depois do último, recomeça pelo primeiro. Desligue o atalho para todos voltarem a tocar.</value>
+    <value>A cada toque, só o próximo aplicativo da lista abaixo fica com som e os outros da lista ficam mudos, começando pelo aplicativo em foco. Os demais aplicativos não são afetados. Depois do último, recomeça pelo primeiro. Desligue o atalho para devolver o som aos aplicativos.</value>
   </data>
   <data name="AppHotkeys_AllApps" xml:space="preserve">
     <value>Todos os aplicativos</value>
+  </data>
+  <data name="AppHotkeys_SoloApps" xml:space="preserve">
+    <value>Aplicativos do ciclo</value>
+  </data>
+  <data name="AppHotkeys_SoloNoApps" xml:space="preserve">
+    <value>Nenhum aplicativo ainda. Adicione os aplicativos entre os quais o ciclo alterna, na ordem que quiser.</value>
+  </data>
+  <data name="AppHotkeys_SoloAppHint" xml:space="preserve">
+    <value>Aplicativos abertos no dispositivo padrão</value>
+  </data>
+  <data name="AppHotkeys_SoloNoOpenApps" xml:space="preserve">
+    <value>Nenhum outro aplicativo está aberto no dispositivo padrão.</value>
+  </data>
+  <data name="AppHotkeys_MoveUp" xml:space="preserve">
+    <value>Mover para cima</value>
+  </data>
+  <data name="AppHotkeys_MoveDown" xml:space="preserve">
+    <value>Mover para baixo</value>
+  </data>
+  <data name="AppHotkeys_MoveUpApp" xml:space="preserve">
+    <value>Mover {0} para cima</value>
+  </data>
+  <data name="AppHotkeys_MoveDownApp" xml:space="preserve">
+    <value>Mover {0} para baixo</value>
   </data>
 </root>

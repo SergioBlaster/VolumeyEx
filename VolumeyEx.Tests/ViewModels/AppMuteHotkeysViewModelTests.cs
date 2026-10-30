@@ -34,6 +34,8 @@ public class AppMuteHotkeysViewModelTests : ViewModelTestBase
 		b = PlayingApp("B", 101);
 		device = CreateDevice("device", "Speakers", a, b);
 		SetDefaultDevice(device);
+		//the round's apps, unless a test picks others
+		Settings.Hotkeys.SoloApps = new[] { "A", "B" };
 	}
 
 	private AudioProcessModel PlayingApp(string name, uint processId)
@@ -260,6 +262,81 @@ public class AppMuteHotkeysViewModelTests : ViewModelTestBase
 		PressHotkey(MuteAll);
 
 		ChangeDefaultDevice(CreateDevice("other", "Headphones"));
+
+		Assert.AreEqual("A,B", Audible());
+	}
+
+	private static string Names(AppMuteHotkeysViewModel model) => string.Join(",", model.SoloApps.Select(app => app.Name));
+
+	[TestMethod]
+	public void TheSavedRoundAppsAreShownWithTheIconsOfTheOpenOnes()
+	{
+		Settings.Hotkeys.SoloApps = new[] { "B", "Closed", "A" };
+		var model = Create();
+
+		Assert.AreEqual("B,Closed,A", Names(model));
+		Assert.IsNull(model.SoloApps[1].IconSource);
+	}
+
+	[TestMethod]
+	public void TheAddDialogOffersTheOpenAppsThatArentInTheRoundAndAddsAtTheEnd()
+	{
+		Settings.Hotkeys.SoloApps = new[] { "A" };
+		var model = Create();
+
+		model.PrepareAddSoloApp();
+		CollectionAssert.AreEqual(new[] { b }, model.AddableSoloApps);
+		Assert.IsFalse(model.AddSoloApp(), "nothing picked");
+
+		model.SelectedSoloApp = b;
+		Assert.IsTrue(model.AddSoloApp());
+
+		Assert.AreEqual("A,B", Names(model));
+		CollectionAssert.AreEqual(new[] { "A", "B" }, Settings.Hotkeys.SoloApps.ToList());
+	}
+
+	[TestMethod]
+	public void MovingAnAppChangesTheRoundsOrder()
+	{
+		Settings.Hotkeys.SoloPlayingApp = Solo;
+		var model = Create();
+		ActivateHotkeys();
+		Assert.IsFalse(model.SoloApps[0].MoveUpCommand.CanExecute(null), "the first app can't move up");
+		Assert.IsFalse(model.SoloApps[1].MoveDownCommand.CanExecute(null), "the last app can't move down");
+
+		model.SoloApps[1].MoveUpCommand.Execute(null);
+
+		Assert.AreEqual("B,A", Names(model));
+		CollectionAssert.AreEqual(new[] { "B", "A" }, Settings.Hotkeys.SoloApps.ToList());
+		PressHotkey(Solo);
+		Assert.AreEqual("B", Audible());
+	}
+
+	[TestMethod]
+	public void RemovingAnAppDuringTheRoundGivesItsStateBack()
+	{
+		Settings.Hotkeys.SoloPlayingApp = Solo;
+		var model = Create();
+		ActivateHotkeys();
+		PressHotkey(Solo);
+		Assert.AreEqual("A", Audible());
+
+		model.SoloApps.Single(app => app.Name == "B").RemoveCommand.Execute(null);
+
+		Assert.AreEqual("A,B", Audible());
+		Assert.AreEqual("A", Names(model));
+		CollectionAssert.AreEqual(new[] { "A" }, Settings.Hotkeys.SoloApps.ToList());
+	}
+
+	[TestMethod]
+	public void AppsOutsideTheRoundArentTouched()
+	{
+		Settings.Hotkeys.SoloApps = new[] { "B" };
+		Settings.Hotkeys.SoloPlayingApp = Solo;
+		Create();
+		ActivateHotkeys();
+
+		PressHotkey(Solo);
 
 		Assert.AreEqual("A,B", Audible());
 	}

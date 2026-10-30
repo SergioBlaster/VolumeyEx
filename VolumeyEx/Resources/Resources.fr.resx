@@ -587,12 +587,36 @@
     <value>Appuyez à nouveau pour rendre à chaque application l'état qu'elle avait avant. Les applications qui démarrent entre-temps sont aussi coupées.</value>
   </data>
   <data name="AppHotkeys_Solo" xml:space="preserve">
-    <value>Une seule application audible à la fois</value>
+    <value>Alterner le son entre les applications</value>
   </data>
   <data name="AppHotkeys_SoloDescription" xml:space="preserve">
-    <value>Chaque appui laisse audible l'application suivante qui joue du son et coupe les autres, en commençant par l'application au premier plan. Après la dernière, on recommence par la première. Désactivez-le pour que toutes redeviennent audibles.</value>
+    <value>Chaque appui laisse audible seulement l'application suivante de la liste ci-dessous et coupe les autres de la liste, en commençant par l'application au premier plan. Les autres applications ne sont pas concernées. Après la dernière, on recommence par la première. Désactivez-le pour rendre le son aux applications.</value>
   </data>
   <data name="AppHotkeys_AllApps" xml:space="preserve">
     <value>Toutes les applications</value>
+  </data>
+  <data name="AppHotkeys_SoloApps" xml:space="preserve">
+    <value>Applications du cycle</value>
+  </data>
+  <data name="AppHotkeys_SoloNoApps" xml:space="preserve">
+    <value>Aucune application pour l'instant. Ajoutez les applications entre lesquelles le cycle alterne, dans l'ordre voulu.</value>
+  </data>
+  <data name="AppHotkeys_SoloAppHint" xml:space="preserve">
+    <value>Applications ouvertes sur le périphérique par défaut</value>
+  </data>
+  <data name="AppHotkeys_SoloNoOpenApps" xml:space="preserve">
+    <value>Aucune autre application n'est ouverte sur le périphérique par défaut.</value>
+  </data>
+  <data name="AppHotkeys_MoveUp" xml:space="preserve">
+    <value>Monter</value>
+  </data>
+  <data name="AppHotkeys_MoveDown" xml:space="preserve">
+    <value>Descendre</value>
+  </data>
+  <data name="AppHotkeys_MoveUpApp" xml:space="preserve">
+    <value>Monter {0}</value>
+  </data>
+  <data name="AppHotkeys_MoveDownApp" xml:space="preserve">
+    <value>Descendre {0}</value>
   </data>
 </root>

@@ -587,12 +587,36 @@
     <value>Нажмите ещё раз, чтобы вернуть каждому приложению прежнее состояние. Приложения, запущенные в это время, тоже отключаются.</value>
   </data>
   <data name="AppHotkeys_Solo" xml:space="preserve">
-    <value>Только одно воспроизводящее приложение</value>
+    <value>Переключать звук между приложениями</value>
   </data>
   <data name="AppHotkeys_SoloDescription" xml:space="preserve">
-    <value>Каждое нажатие оставляет слышным следующее воспроизводящее приложение и отключает остальные, начиная с приложения в фокусе. После последнего всё начинается с первого. Выключите, чтобы снова слышать все.</value>
+    <value>Каждое нажатие оставляет слышным только следующее приложение из списка ниже и отключает остальные приложения списка, начиная с приложения в фокусе. Другие приложения не затрагиваются. После последнего всё начинается с первого. Выключите, чтобы вернуть приложениям звук.</value>
   </data>
   <data name="AppHotkeys_AllApps" xml:space="preserve">
     <value>Все приложения</value>
+  </data>
+  <data name="AppHotkeys_SoloApps" xml:space="preserve">
+    <value>Приложения цикла</value>
+  </data>
+  <data name="AppHotkeys_SoloNoApps" xml:space="preserve">
+    <value>Приложений пока нет. Добавьте приложения, между которыми переключается цикл, в нужном порядке.</value>
+  </data>
+  <data name="AppHotkeys_SoloAppHint" xml:space="preserve">
+    <value>Приложения, открытые на устройстве по умолчанию</value>
+  </data>
+  <data name="AppHotkeys_SoloNoOpenApps" xml:space="preserve">
+    <value>На устройстве по умолчанию не открыто других приложений.</value>
+  </data>
+  <data name="AppHotkeys_MoveUp" xml:space="preserve">
+    <value>Вверх</value>
+  </data>
+  <data name="AppHotkeys_MoveDown" xml:space="preserve">
+    <value>Вниз</value>
+  </data>
+  <data name="AppHotkeys_MoveUpApp" xml:space="preserve">
+    <value>Переместить {0} вверх</value>
+  </data>
+  <data name="AppHotkeys_MoveDownApp" xml:space="preserve">
+    <value>Переместить {0} вниз</value>
   </data>
 </root>
