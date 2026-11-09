@@ -584,7 +584,7 @@
     <value>Mutar todos os aplicativos</value>
   </data>
   <data name="AppHotkeys_MuteAllDescription" xml:space="preserve">
-    <value>Pressione de novo para devolver a cada aplicativo o estado que ele tinha antes. Aplicativos que começarem a tocar nesse meio-tempo também ficam mudos.</value>
+    <value>Pressione de novo para todos os aplicativos voltarem a ter som, exceto os da lista de alternância, que voltam ao ponto em que o ciclo estava. Aplicativos que começarem a tocar nesse meio-tempo também ficam mudos.</value>
   </data>
   <data name="AppHotkeys_Solo" xml:space="preserve">
     <value>Alternar o som entre aplicativos</value>

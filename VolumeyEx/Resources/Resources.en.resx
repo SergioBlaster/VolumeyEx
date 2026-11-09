@@ -643,7 +643,7 @@
     <value>Mute all apps</value>
   </data>
   <data name="AppHotkeys_MuteAllDescription" xml:space="preserve">
-    <value>Press again to give each app back the state it had before. Apps that start while it's on are muted too.</value>
+    <value>Press again to give every app its sound back, except the apps of the switching list, which go back to where their round was. Apps that start while it's on are muted too.</value>
   </data>
   <data name="AppHotkeys_Solo" xml:space="preserve">
     <value>Switch the sound between apps</value>

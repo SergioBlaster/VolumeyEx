@@ -584,7 +584,7 @@
     <value>すべてのアプリをミュート</value>
   </data>
   <data name="AppHotkeys_MuteAllDescription" xml:space="preserve">
-    <value>もう一度押すと、各アプリが以前の状態に戻ります。その間に起動したアプリもミュートされます。</value>
+    <value>もう一度押すと、すべてのアプリのサウンドが戻ります。切り替えリストのアプリは、切り替えの途中の状態に戻ります。その間に起動したアプリもミュートされます。</value>
   </data>
   <data name="AppHotkeys_Solo" xml:space="preserve">
     <value>アプリ間でサウンドを切り替え</value>

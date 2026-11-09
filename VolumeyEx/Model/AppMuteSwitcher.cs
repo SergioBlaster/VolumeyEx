@@ -19,9 +19,9 @@ namespace VolumeyEx.Model;
 /// device changes, VolumeyEx exits), and an app that's taken off the list gets its state back right away.
 /// </para>
 /// <para>
-/// Mute all mutes every app, also the ones that start while it's on; pressed again it gives each app back the state it had right before,
-/// so during a solo round the round's state comes back and the round goes on. The two keep their own saved states: mute all is a layer
-/// over the round. A solo press while all apps are muted gives the states from before mute all back first.
+/// Mute all mutes every app, also the ones that start while it's on. Pressed again, every app plays again, except the apps of the solo
+/// round's list: they get the state they had right before, so during a round the round's state comes back and the round goes on. The two
+/// keep their own saved states: mute all is a layer over the round. A solo press while all apps are muted ends mute all first.
 /// </para>
 /// Windows keeps an app's mute after it exits, so an app that exits while muted here gets its state back when it starts again.
 /// Used on the UI thread: the hotkeys and the device's app list (<see cref="ObservableCollection{T}.CollectionChanged"/>) are raised there.
@@ -178,17 +178,31 @@ internal sealed class AppMuteSwitcher
 		RestoreSolo();
 	}
 
-	/// <summary>Gives each app the state it had right before mute all (the solo round's, while it's on)</summary>
+	/// <summary>
+	/// Ends mute all: every open app plays again, except the apps of the solo round's list, which get the state they had right before
+	/// (the round's). It goes through the apps open now, not only the ones it muted: Windows may have rebuilt an app meanwhile (it
+	/// reopened its audio, the device was reconfigured), and the new one starts muted. A picked app it didn't see follows the round
+	/// </summary>
 	internal void RestoreMuteAll()
 	{
-		foreach(var (app, wasMuted) in muteAllStates)
+		if(allMuted && apps != null)
 		{
-			if(IsShown(app))
-				app.IsMuted = wasMuted;
+			foreach(var app in apps.ToList())
+			{
+				if(!IsPicked(app))
+					app.IsMuted = false;
+				else if(muteAllStates.TryGetValue(app, out bool wasMuted))
+					app.IsMuted = wasMuted;
+				else
+					//audible only if it's the round's audible app; a picked app plays when no round is on
+					app.IsMuted = soloOn && app.Name != soloName;
+			}
 		}
 		muteAllStates.Clear();
 		allMuted = false;
 	}
+
+	private bool IsPicked(AudioProcessModel app) => soloApps.Contains(app.Name);
 
 	/// <summary>
 	/// Ends the solo round: each app gets the state it had before it. While mute all is on the apps stay muted, and mute all
@@ -242,7 +256,8 @@ internal sealed class AppMuteSwitcher
 		bool hadMuteAll = muteAllStates.Remove(app, out bool beforeMuteAll);
 		if(hadSolo || hadMuteAll)
 		{
-			bool original = hadSolo ? beforeSolo : beforeMuteAll;
+			//an app outside the round's list plays again after mute all, whatever it had before
+			bool original = hadSolo ? beforeSolo : IsPicked(app) && beforeMuteAll;
 			if(app.IsMuted != original)
 				exitedApps[KeyOf(app)] = original;
 		}

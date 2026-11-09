@@ -584,7 +584,7 @@
     <value>सभी ऐप्स म्यूट करें</value>
   </data>
   <data name="AppHotkeys_MuteAllDescription" xml:space="preserve">
-    <value>हर ऐप को उसकी पहले वाली स्थिति वापस देने के लिए फिर से दबाएँ। इस बीच शुरू होने वाले ऐप्स भी म्यूट हो जाते हैं।</value>
+    <value>सभी ऐप्स की आवाज़ वापस लाने के लिए फिर से दबाएँ, चक्र की सूची वाले ऐप्स को छोड़कर, जो चक्र की उसी जगह पर लौट आते हैं। इस बीच शुरू होने वाले ऐप्स भी म्यूट हो जाते हैं।</value>
   </data>
   <data name="AppHotkeys_Solo" xml:space="preserve">
     <value>ऐप्स के बीच आवाज़ बदलें</value>

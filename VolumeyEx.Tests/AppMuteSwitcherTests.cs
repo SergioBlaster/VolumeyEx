@@ -47,7 +47,7 @@ public class AppMuteSwitcherTests
 	private string Next(Func<AudioProcessModel, bool> isForeground = null) => switcher.SoloNext(isForeground ?? NoForeground)?.Name;
 
 	[TestMethod]
-	public void MuteAllMutesEveryAppAndGivesEachItsStateBack()
+	public void MuteAllMutesEveryAppAndThenGivesThemAllTheirSoundBack()
 	{
 		App("A");
 		App("B", muted: true);
@@ -58,9 +58,60 @@ public class AppMuteSwitcherTests
 		Assert.AreEqual("", Audible());
 		Assert.IsTrue(switcher.AllMuted);
 
+		//also B, which was muted before
 		Assert.IsFalse(switcher.ToggleMuteAll());
-		Assert.AreEqual("A,Sounds,Quiet", Audible());
+		Assert.AreEqual("A,B,Sounds,Quiet", Audible());
 		Assert.IsFalse(switcher.AllMuted);
+	}
+
+	[TestMethod]
+	public void MuteAllLeavesTheAppsOfTheListAsTheyWere()
+	{
+		App("A");
+		App("Picked", muted: true);
+		App("Other", muted: true);
+		Pick("Picked");
+
+		switcher.ToggleMuteAll();
+		switcher.ToggleMuteAll();
+
+		//no round is on: the picked app keeps its own state, every other app plays
+		Assert.AreEqual("A,Other", Audible());
+	}
+
+	[TestMethod]
+	public void AnAppWindowsRebuiltWhileAllAreMutedGetsItsSoundBack()
+	{
+		App("A");
+		var b = App("B");
+		switcher.ToggleMuteAll();
+
+		//its audio reopened: a new model, read muted from Windows
+		apps.Remove(b);
+		App("B", muted: true);
+
+		switcher.ToggleMuteAll();
+		Assert.AreEqual("A,B", Audible());
+	}
+
+	[TestMethod]
+	public void APickedAppReopenedWhileAllAreMutedPlaysLikeOneThatOpensDuringTheRound()
+	{
+		App("A");
+		var b = App("B");
+		App("C");
+		Pick("A", "B", "C");
+		Assert.AreEqual("A", Next());
+		switcher.ToggleMuteAll();
+
+		apps.Remove(b);
+		App("B", muted: true);
+		switcher.ToggleMuteAll();
+
+		//A is the round's audible app and C stays muted; B came back with its state from before the round, until the next press
+		Assert.AreEqual("A,B", Audible());
+		Assert.AreEqual("B", Next());
+		Assert.AreEqual("B", Audible());
 	}
 
 	[TestMethod]

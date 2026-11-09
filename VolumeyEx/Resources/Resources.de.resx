@@ -584,7 +584,7 @@
     <value>Alle Apps stummschalten</value>
   </data>
   <data name="AppHotkeys_MuteAllDescription" xml:space="preserve">
-    <value>Erneut drücken, um jeder App ihren vorherigen Zustand zurückzugeben. Apps, die in der Zwischenzeit starten, werden ebenfalls stummgeschaltet.</value>
+    <value>Erneut drücken, damit alle Apps wieder zu hören sind, außer den Apps der Wechselliste: Sie kehren dorthin zurück, wo der Wechsel stand. Apps, die in der Zwischenzeit starten, werden ebenfalls stummgeschaltet.</value>
   </data>
   <data name="AppHotkeys_Solo" xml:space="preserve">
     <value>Ton zwischen Apps wechseln</value>

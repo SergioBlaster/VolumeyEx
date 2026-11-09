@@ -22,7 +22,7 @@
 - **Foreground app:** control whichever app is in focus
 - **Output device:** change the volume of the default device or mute it
 - **Default device:** switch to another output device with one key
-- **Mute all apps:** one key mutes every app, the next gives each its state back
+- **Mute all apps:** one key mutes every app, the next gives them all their sound back (the switching list goes back to its round)
 - **Switch between apps:** pick the apps; each press leaves the next one audible and mutes the other picked ones, then mutes all of them, round and round
 - **Media keys:** play/pause, previous, next and stop
 - **Mixer:** open the volume mixer

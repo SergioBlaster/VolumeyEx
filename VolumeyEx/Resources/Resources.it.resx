@@ -584,7 +584,7 @@
     <value>Disattiva l'audio di tutte le app</value>
   </data>
   <data name="AppHotkeys_MuteAllDescription" xml:space="preserve">
-    <value>Premi di nuovo per restituire a ogni app lo stato che aveva prima. Anche le app che si avviano nel frattempo vengono disattivate.</value>
+    <value>Premi di nuovo per restituire l'audio a tutte le app, tranne quelle dell'elenco del ciclo, che tornano al punto in cui era il ciclo. Anche le app che si avviano nel frattempo vengono disattivate.</value>
   </data>
   <data name="AppHotkeys_Solo" xml:space="preserve">
     <value>Alterna l'audio tra le app</value>

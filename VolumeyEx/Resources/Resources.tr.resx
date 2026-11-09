@@ -584,7 +584,7 @@
     <value>Tüm uygulamaların sesini kapat</value>
   </data>
   <data name="AppHotkeys_MuteAllDescription" xml:space="preserve">
-    <value>Her uygulamaya önceki durumunu geri vermek için yeniden basın. Bu sırada başlayan uygulamaların da sesi kapatılır.</value>
+    <value>Tüm uygulamaların sesini geri vermek için yeniden basın; döngü listesindeki uygulamalar döngünün kaldığı yere döner. Bu sırada başlayan uygulamaların da sesi kapatılır.</value>
   </data>
   <data name="AppHotkeys_Solo" xml:space="preserve">
     <value>Sesi uygulamalar arasında değiştir</value>

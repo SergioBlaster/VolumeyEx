@@ -584,7 +584,7 @@
     <value>Couper le son de toutes les applications</value>
   </data>
   <data name="AppHotkeys_MuteAllDescription" xml:space="preserve">
-    <value>Appuyez à nouveau pour rendre à chaque application l'état qu'elle avait avant. Les applications qui démarrent entre-temps sont aussi coupées.</value>
+    <value>Appuyez à nouveau pour rendre le son à toutes les applications, sauf celles de la liste du cycle, qui reviennent là où en était le cycle. Les applications qui démarrent entre-temps sont aussi coupées.</value>
   </data>
   <data name="AppHotkeys_Solo" xml:space="preserve">
     <value>Alterner le son entre les applications</value>

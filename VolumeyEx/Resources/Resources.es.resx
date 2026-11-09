@@ -584,7 +584,7 @@
     <value>Silenciar todas las aplicaciones</value>
   </data>
   <data name="AppHotkeys_MuteAllDescription" xml:space="preserve">
-    <value>Vuelve a pulsar para devolver a cada aplicación el estado que tenía antes. Las aplicaciones que se inicien mientras tanto también se silencian.</value>
+    <value>Vuelve a pulsar para devolver el sonido a todas las aplicaciones, excepto a las de la lista del ciclo, que vuelven al punto en que estaba el ciclo. Las aplicaciones que se inicien mientras tanto también se silencian.</value>
   </data>
   <data name="AppHotkeys_Solo" xml:space="preserve">
     <value>Alternar el sonido entre aplicaciones</value>

@@ -584,7 +584,7 @@
     <value>将所有应用静音</value>
   </data>
   <data name="AppHotkeys_MuteAllDescription" xml:space="preserve">
-    <value>再次按下可将每个应用恢复到之前的状态。在此期间启动的应用也会静音。</value>
+    <value>再次按下可恢复所有应用的声音，循环列表中的应用除外，它们会回到循环所在的位置。在此期间启动的应用也会静音。</value>
   </data>
   <data name="AppHotkeys_Solo" xml:space="preserve">
     <value>在应用之间切换声音</value>
